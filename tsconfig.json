@@ -1,0 +1,4 @@
+{
+  "extends": "@noutify/tsconfig/base.json"
+}
+

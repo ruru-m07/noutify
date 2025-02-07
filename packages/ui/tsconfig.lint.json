@@ -1,12 +1,8 @@
 {
   "extends": "@noutify/tsconfig/react-library.json",
   "compilerOptions": {
-    //"outDir": "dist"
-    "baseUrl": ".",
-    "paths": {
-      "@noutify/ui/*": ["./src/*"]
-    }
+    "outDir": "dist"
   },
-  "include": ["."],
+  "include": ["src", "turbo"],
   "exclude": ["node_modules", "dist"]
 }

@@ -2,12 +2,12 @@
 
 <!--
 
-Please do not leave this blank
+Please do not leave this blank.
 This PR [adds/removes/fixes/replaces] the [feature/bug/etc].
 
 **EXAMPLES:**
 
-This PR adds a more bugs that allows users to do nothing.
+This PR adds more bugs that allow users to do nothing.
 
 -->
 

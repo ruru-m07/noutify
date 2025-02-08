@@ -1,6 +1,7 @@
-'use client'
+"use client";
 
-import { Button } from "@noutify/ui/components/button"
+import { Button } from "@noutify/ui/components/button";
+import * as React from "react";
 
 export default function Page() {
   return (
@@ -10,5 +11,5 @@ export default function Page() {
         <Button size="sm">Button</Button>
       </div>
     </div>
-  )
+  );
 }

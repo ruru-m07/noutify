@@ -19,13 +19,22 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.20.0",
     "@noutify/eslint": "*",
     "@noutify/tsconfig": "*",
     "@types/node": "^22.10.1",
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.0",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^15.14.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.23.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0",
+    "eslint-config-prettier": "^9.0.0"
   }
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@noutify/ui/components/button";
-import { Switch } from "@noutify/ui/components/switch";
+import * as React from "react";
 
 export default function Page() {
   return (

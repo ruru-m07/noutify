@@ -26,6 +26,7 @@ interface AppStateContextType {
     React.SetStateAction<Notification | null>
   >;
   user: User | null;
+  isNotificationsLoading: boolean;
 }
 
 export const AppStateContext = createContext<AppStateContextType | undefined>(
@@ -37,6 +38,9 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   // ! All centralized states
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  // ! Is Notification Loading
+  const [isNotificationsLoading, setIsNotificationsLoading] =
+    useState<boolean>(true);
 
   // ! Selected notification
   const [selectedNotification, setSelectedNotification] =
@@ -54,6 +58,7 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({
       ]);
       setUser(activeUser);
       setNotifications(notificationsList);
+      setIsNotificationsLoading(false);
     })();
   }, []);
 
@@ -64,6 +69,7 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({
         selectedNotification,
         setSelectedNotification,
         user,
+        isNotificationsLoading,
       }}
     >
       {children}

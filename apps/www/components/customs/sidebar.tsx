@@ -2,21 +2,18 @@
 
 import React from "react";
 import {
-  Bolt,
-  BookOpen,
   CircleDot,
   GitPullRequestArrow,
   Inbox,
-  Layers2,
   LogOut,
-  Pin,
-  UserPen,
+  Monitor,
+  Moon,
+  Sun,
   type LucideIcon,
 } from "lucide-react";
 
 import { Button } from "@noutify/ui/components/button";
 import Link from "next/link";
-import ThemeSwitcher from "../themeSwitcher";
 import Image from "next/image";
 import {
   DropdownMenu,
@@ -24,7 +21,13 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@noutify/ui/components/dropdown-menu";
 import {
@@ -46,6 +49,7 @@ import {
 import { usePathname } from "next/navigation";
 import { cn } from "@noutify/ui/lib/utils";
 import { useAppState } from "@/hooks/useAppState";
+import { useTheme } from "next-themes";
 
 const Sidebar = () => {
   const Items: Array<{
@@ -72,6 +76,7 @@ const Sidebar = () => {
 
   const pathname = usePathname();
   const { user } = useAppState();
+  const { theme, setTheme } = useTheme();
 
   return (
     <div className="h-screen w-[--sidebar-width] flex flex-col justify-between items-center -mr-2">
@@ -152,7 +157,6 @@ const Sidebar = () => {
       </div>
 
       <div className="m-2">
-        <ThemeSwitcher />
         <div className="space-y-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -175,60 +179,79 @@ const Sidebar = () => {
                   {user?.name}
                 </span>
                 <span className="truncate text-xs font-normal text-muted-foreground">
-                  {user?.login}                  
+                  {user?.login}
                 </span>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Bolt
-                    size={16}
-                    strokeWidth={2}
-                    className="opacity-60"
-                    aria-hidden="true"
-                  />
-                  <span>Option 1</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Layers2
-                    size={16}
-                    strokeWidth={2}
-                    className="opacity-60"
-                    aria-hidden="true"
-                  />
-                  <span>Option 2</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <BookOpen
-                    size={16}
-                    strokeWidth={2}
-                    className="opacity-60"
-                    aria-hidden="true"
-                  />
-                  <span>Option 3</span>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Pin
-                    size={16}
-                    strokeWidth={2}
-                    className="opacity-60"
-                    aria-hidden="true"
-                  />
-                  <span>Option 4</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <UserPen
-                    size={16}
-                    strokeWidth={2}
-                    className="opacity-60"
-                    aria-hidden="true"
-                  />
-                  <span>Option 5</span>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
+              <DropdownMenuLabel>Preferences</DropdownMenuLabel>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  {theme === "light" && (
+                    <Sun
+                      size={16}
+                      strokeWidth={2}
+                      className="opacity-60"
+                      aria-hidden="true"
+                    />
+                  )}
+                  {theme === "dark" && (
+                    <Moon
+                      size={16}
+                      strokeWidth={2}
+                      className="opacity-60"
+                      aria-hidden="true"
+                    />
+                  )}
+                  {theme === "system" && (
+                    <Monitor
+                      size={16}
+                      strokeWidth={2}
+                      className="opacity-60"
+                      aria-hidden="true"
+                    />
+                  )}
+                  Theme
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuRadioGroup
+                      value={theme}
+                      onValueChange={setTheme}
+                    >
+                      <DropdownMenuSeparator />
+                      <DropdownMenuGroup>
+                        <DropdownMenuRadioItem className="gap-3" value="light">
+                          <Sun
+                            size={16}
+                            strokeWidth={2}
+                            className="opacity-60"
+                            aria-hidden="true"
+                          />
+                          <span>Light</span>
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem className="gap-3" value="dark">
+                          <Moon
+                            size={16}
+                            strokeWidth={2}
+                            className="opacity-60"
+                            aria-hidden="true"
+                          />
+                          <span>Dark</span>
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem className="gap-3" value="system">
+                          <Monitor
+                            size={16}
+                            strokeWidth={2}
+                            className="opacity-60"
+                            aria-hidden="true"
+                          />
+                          <span>System</span>
+                        </DropdownMenuRadioItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">
                 <LogOut

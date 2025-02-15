@@ -12,9 +12,9 @@
   "iconLibrary": "lucide",
   "aliases": {
     "components": "@noutify/ui/components",
-    "utils": "@noutify/ui/lib/utils",
+    "utils": "@noutify/ui/lib",
     "hooks": "@noutify/ui/hooks",
-    "lib": "@noutify/ui/lib",
+    "lib": "@noutify/ui/lib/utils",
     "ui": "@noutify/ui/components"
   }
 }

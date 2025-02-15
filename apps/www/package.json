@@ -10,7 +10,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@noutify/env": "*",
+    "@noutify/functions": "*",
     "@noutify/ui": "*",
+    "@radix-ui/react-icons": "^1.3.2",
     "geist": "^1.3.1",
     "lucide-react": "0.456.0",
     "next": "^14.2.4",
@@ -19,9 +22,9 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.20.0",
     "@noutify/eslint": "*",
     "@noutify/tsconfig": "*",
+    "@eslint/js": "^9.20.0",
     "@types/node": "^22.10.1",
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.0",

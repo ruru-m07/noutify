@@ -2,9 +2,9 @@
   "name": "noutify",
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
+    "build": "dotenv -- turbo build",
+    "dev": "dotenv -- turbo run dev --env-mode=loose",
+    "lint": "dotenv -- turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
@@ -12,7 +12,8 @@
     "@noutify/tsconfig": "*",
     "prettier": "^3.2.5",
     "turbo": "^2.3.0",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "dotenv-cli": "latest"
   },
   "engines": {
     "node": ">=18"

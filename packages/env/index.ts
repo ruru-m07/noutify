@@ -10,7 +10,6 @@ const envSchema = z.object({
   OAUTH_GITHUB_SECRET: z.string().min(1, "OAUTH_GITHUB_SECRET is required"),
   AUTH_SECRET: z.string().min(1, "AUTH_SECRET is required"),
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
-  NEXT_PUBLIC_URL: z.string().min(1, "NEXT_PUBLIC_URL is required"),
 });
 
 /** // ? Export the inferred TypeScript type for consumers */

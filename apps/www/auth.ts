@@ -24,8 +24,8 @@ export const {
   adapter: PrismaAdapter(prisma),
   providers: [
     GitHub({
-      clientId: env.GITHUB_ID,
-      clientSecret: env.GITHUB_SECRET,
+      clientId: env.OAUTH_GITHUB_ID,
+      clientSecret: env.OAUTH_GITHUB_SECRET,
     }),
   ],
   session: {

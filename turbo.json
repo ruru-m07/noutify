@@ -18,7 +18,7 @@
     "build": {
       "dependsOn": ["^build", "^db:generate"],
       "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["GITHUB_ID", "GITHUB_SECRET", "AUTH_SECRET", "DATABASE_URL"] 
+      "env": ["OAUTH_GITHUB_ID", "OAUTH_GITHUB_SECRET", "AUTH_SECRET", "DATABASE_URL"] 
     },
     "lint": {
       "dependsOn": ["^lint", "^db:generate"]

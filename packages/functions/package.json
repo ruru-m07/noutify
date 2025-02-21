@@ -1,0 +1,20 @@
+{
+  "name": "@noutify/functions",
+  "module": "index.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@noutify/tsconfig": "*"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@octokit/rest": "^21.1.0"
+  }
+}

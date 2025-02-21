@@ -8,12 +8,12 @@ export default async function middleware(req: NextRequest) {
   const isAuthenticated = !!session;
 
   // Define public routes
-  // const publicRoutes = ["/", "/auth/login", "/auth/token"];
+  const publicRoutes = ["/", "/auth/login", "/auth/token"];
 
   // Allow access to public routes
-  // if (publicRoutes.includes(pathname)) {
-  //   return NextResponse.next();
-  // }
+  if (publicRoutes.includes(pathname)) {
+    return NextResponse.next();
+  }
 
   // Allow assets to be accessed freely
   if (
@@ -24,18 +24,18 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // if (isAuthenticated && publicRoutes.includes(pathname)) {
-  //   // Redirect authenticated users away from public routes
-  //   return NextResponse.redirect(new URL("/", req.url));
-  // }
+  if (isAuthenticated && publicRoutes.includes(pathname)) {
+    // Redirect authenticated users away from public routes
+    return NextResponse.redirect(new URL("/", req.url));
+  }
 
-  // if (!isAuthenticated && !publicRoutes.includes(pathname)) {
-  //   // Redirect unauthenticated users trying to access protected routes
-  //   const callbackUrl = encodeURIComponent(req.url);
-  //   return NextResponse.redirect(
-  //     new URL(`/auth/login?callbackUrl=${callbackUrl}`, req.url)
-  //   );
-  // }
+  if (!isAuthenticated && !publicRoutes.includes(pathname)) {
+    // Redirect unauthenticated users trying to access protected routes
+    const callbackUrl = encodeURIComponent(req.url);
+    return NextResponse.redirect(
+      new URL(`/auth/login?callbackUrl=${callbackUrl}`, req.url)
+    );
+  }
 
   // Redirect unauthenticated users to login page
   if (!isAuthenticated) {

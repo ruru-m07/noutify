@@ -1,6 +1,12 @@
+import { auth } from "@/auth";
 import { GithubClient } from "@noutify/functions";
-import { env } from "@noutify/env";
 
-export const ghClient = new GithubClient({
-  token: env.GITHUB_TOKEN,
-});
+export async function getGithubClient(): Promise<GithubClient> {
+  const session = await auth();
+  if (!session || !session.user.accessToken) {
+    throw new Error("No valid session available");
+  }
+  return new GithubClient({
+    token: session.user.accessToken,
+  });
+}

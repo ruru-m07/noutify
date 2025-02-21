@@ -7,9 +7,12 @@ const H1 = React.forwardRef<
 >((props, ref) => {
   return (
     <h1
-      className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl"
-      ref={ref}
       {...props}
+      className={cn(
+        "scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl",
+        props.className
+      )}
+      ref={ref}
     />
   );
 });
@@ -21,9 +24,12 @@ const H2 = React.forwardRef<
 >((props, ref) => {
   return (
     <h2
-      className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0"
-      ref={ref}
       {...props}
+      className={cn(
+        "scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0",
+        props.className
+      )}
+      ref={ref}
     />
   );
 });
@@ -35,9 +41,12 @@ const H3 = React.forwardRef<
 >((props, ref) => {
   return (
     <h3
-      className="scroll-m-20 text-2xl font-semibold tracking-tight"
-      ref={ref}
       {...props}
+      className={cn(
+        "scroll-m-20 text-2xl font-semibold tracking-tight",
+        props.className
+      )}
+      ref={ref}
     />
   );
 });
@@ -49,9 +58,12 @@ const H4 = React.forwardRef<
 >((props, ref) => {
   return (
     <h4
-      className="scroll-m-20 text-xl font-semibold tracking-tight"
-      ref={ref}
       {...props}
+      className={cn(
+        "scroll-m-20 text-xl font-semibold tracking-tight",
+        props.className
+      )}
+      ref={ref}
     />
   );
 });
@@ -62,7 +74,11 @@ const P = React.forwardRef<
   React.HTMLAttributes<HTMLParagraphElement>
 >((props, ref) => {
   return (
-    <p className="leading-7 [&:not(:first-child)]:mt-6" ref={ref} {...props} />
+    <p
+      {...props}
+      className={cn("leading-7 [&:not(:first-child)]:mt-6", props.className)}
+      ref={ref}
+    />
   );
 });
 P.displayName = "P";
@@ -72,7 +88,11 @@ const Blockquote = React.forwardRef<
   React.HTMLAttributes<HTMLQuoteElement>
 >((props, ref) => {
   return (
-    <blockquote className="mt-6 border-l-2 pl-6 italic" ref={ref} {...props} />
+    <blockquote
+      className={cn("mt-6 border-l-2 pl-6 italic", props.className)}
+      ref={ref}
+      {...props}
+    />
   );
 });
 Blockquote.displayName = "Blockquote";

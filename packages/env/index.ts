@@ -6,7 +6,11 @@ import { z } from "zod";
  * * - Use .optional() for variables that might not be provided.
  */
 const envSchema = z.object({
-  GITHUB_TOKEN: z.string().min(1, "GITHUB_TOKEN is required"),
+  GITHUB_ID: z.string().min(1, "GITHUB_ID is required"),
+  GITHUB_SECRET: z.string().min(1, "GITHUB_SECRET is required"),
+  AUTH_SECRET: z.string().min(1, "AUTH_SECRET is required"),
+  DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
+  NEXT_PUBLIC_URL: z.string().min(1, "NEXT_PUBLIC_URL is required"),
 });
 
 /** // ? Export the inferred TypeScript type for consumers */

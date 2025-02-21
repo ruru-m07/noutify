@@ -1,6 +1,6 @@
 "use client";
 
-import { getAuthenticatedUser, listNotifications } from "@/actions/ghClient";
+import { getAuthenticatedUser, listNotifications } from "@/actions/gh";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import React, {
   createContext,
@@ -8,12 +8,14 @@ import React, {
   useState,
   type ReactNode,
 } from "react";
+import { useSession } from "next-auth/react";
 
 export type BaseNotification =
   RestEndpointMethodTypes["activity"]["listNotificationsForAuthenticatedUser"]["response"]["data"][0];
 
 export interface Notification extends BaseNotification {
   pullRequest?: RestEndpointMethodTypes["pulls"]["get"]["response"]["data"];
+  issue?: RestEndpointMethodTypes["issues"]["get"]["response"]["data"];
 }
 
 export type User =
@@ -48,10 +50,15 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({
 
   // ! user state
   const [user, setUser] = useState<User | null>(null);
+  const { data: session } = useSession();
 
   useEffect(() => {
     // ! Fetch notifications
     (async () => {
+      if (!session || !session.user.accessToken) {
+        return;
+      }
+
       const [notificationsList, activeUser] = await Promise.all([
         listNotifications(),
         getAuthenticatedUser(),
@@ -60,7 +67,7 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({
       setNotifications(notificationsList);
       setIsNotificationsLoading(false);
     })();
-  }, []);
+  }, [session]);
 
   return (
     <AppStateContext.Provider

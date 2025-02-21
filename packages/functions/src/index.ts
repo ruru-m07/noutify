@@ -4,6 +4,7 @@ import { UsersAPI } from "./api/users";
 import { ActivityAPI } from "./api/activity";
 import { ReposAPI } from "./api/repos";
 import { PullsAPI } from "./api/pulls";
+import { IssuesAPI } from "./api/issues";
 
 export interface GithubClientOptions {
   token: string;
@@ -18,6 +19,7 @@ export class GithubClient {
   public readonly activity: ActivityAPI;
   public readonly repos: ReposAPI;
   public readonly pulls: PullsAPI;
+  public readonly issues: IssuesAPI;
 
   private octokit: Octokit;
   private apiVersion: string;
@@ -33,5 +35,6 @@ export class GithubClient {
     this.activity = new ActivityAPI(this.octokit, this.apiVersion);
     this.repos = new ReposAPI(this.octokit, this.apiVersion);
     this.pulls = new PullsAPI(this.octokit, this.apiVersion);
+    this.issues = new IssuesAPI(this.octokit, this.apiVersion);
   }
 }

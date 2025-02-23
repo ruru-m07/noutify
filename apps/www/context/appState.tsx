@@ -4,7 +4,6 @@ import { getAuthenticatedUser, listNotifications } from "@/actions/gh";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import React, {
   createContext,
-  useEffect,
   useLayoutEffect,
   useState,
   type ReactNode,

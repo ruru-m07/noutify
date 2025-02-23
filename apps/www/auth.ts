@@ -66,6 +66,7 @@ export const {
   pages: {
     signIn: "/auth/login",
   },
+  trustHost: true,
 });
 
 export interface Profile {

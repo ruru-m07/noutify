@@ -13,6 +13,7 @@ import {
   CircleSlash,
   MessagesSquare,
   Tag,
+  TriangleAlert,
 } from "lucide-react";
 
 interface NotificationIconProps {
@@ -108,6 +109,11 @@ const NotificationIcon = ({ notification }: NotificationIconProps) => {
       {notification.subject.type === "Release" && (
         <Tag className="text-gray-400" size={19} strokeWidth={1.5} />
       )}
+      {notification.subject.type === "RepositoryDependabotAlertsThread" && (
+        <TriangleAlert className="text-gray-400" size={19} strokeWidth={1.5} />
+      )}
+
+      {/* // TODO: RepositoryInvitation */}
     </div>
   );
 };

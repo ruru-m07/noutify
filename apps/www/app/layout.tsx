@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
+import NextTopLoader from "nextjs-toploader";
 
 import { ContextProvider } from "@/context";
 
 import "@noutify/ui/globals.css";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
   title: "Noutify",
@@ -15,6 +17,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -38,7 +42,19 @@ export default async function RootLayout({
         <link rel="manifest" href="/favicon/site.webmanifest" />
       </head>
       <body className={GeistSans.className}>
-        <ContextProvider>{children}</ContextProvider>
+        <NextTopLoader
+          color="#ffffff"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          zIndex={1600}
+          showAtBottom={false}
+        />
+        <ContextProvider session={session}>{children}</ContextProvider>
       </body>
     </html>
   );

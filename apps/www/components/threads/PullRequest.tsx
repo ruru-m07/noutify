@@ -18,6 +18,7 @@ import {
   TabsTrigger,
 } from "@noutify/ui/components/tabs";
 import { Badge } from "@noutify/ui/components/badge";
+import { Conversation } from "./Conversation";
 
 interface ThreadProps {
   notification: Notification;
@@ -141,9 +142,7 @@ const PullRequestThread = ({ notification }: ThreadProps) => {
             </div>
           </TabsList>
           <TabsContent value="conversation">
-            <p className="pt-1 text-center text-xs text-muted-foreground">
-              Content for Conversation
-            </p>
+            <Conversation notification={notification} />
           </TabsContent>
           <TabsContent value="commits">
             <p className="pt-1 text-center text-xs text-muted-foreground">

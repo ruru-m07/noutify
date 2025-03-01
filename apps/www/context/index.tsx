@@ -12,11 +12,17 @@ const ContextProvider = React.forwardRef<
   HTMLDivElement,
   React.PropsWithChildren<{
     readonly children: React.ReactNode;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    session: any;
   }>
->(({ children }, ref) => {
+>(({ children, session }, ref) => {
   return (
     <div ref={ref}>
-      <SessionProvider>
+      <SessionProvider
+        refetchOnWindowFocus={false}
+        refetchInterval={30000}
+        session={session}
+      >
         <AppStateProvider>
           <ThemeProvider>
             <TooltipProvider delayDuration={0}>{children}</TooltipProvider>

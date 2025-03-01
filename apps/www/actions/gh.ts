@@ -3,14 +3,22 @@
 import type { Notification } from "@/context/appState";
 import { getGithubClient } from "@/lib/ghClient";
 
-export async function listNotifications(): Promise<Notification[]> {
+export async function listNotifications({
+  all,
+  read,
+}: {
+  all?: boolean;
+  read?: boolean;
+}): Promise<Notification[]> {
   const ghClient = await getGithubClient();
 
   const notifications = await ghClient.activity.listNotifications({
-    all: false,
-    read: true,
-    page: 1,
-    per_page: 15,
+    // all: false,
+    // read: true,
+    // page: 1,
+    per_page: 20,
+    all,
+    read, 
   });
 
   const pullRequestNotifications = notifications.filter(

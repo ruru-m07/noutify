@@ -5,6 +5,7 @@
     "build": "dotenv -- turbo run build --env-mode=loose",
     "dev": "dotenv -- turbo run dev --env-mode=loose",
     "lint": "dotenv -- turbo lint",
+    "start": "dotenv -- turbo start",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:migrate": "dotenv -- turbo db:migrate",
     "db:deploy": "dotenv -- turbo db:deploy"

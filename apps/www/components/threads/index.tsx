@@ -16,7 +16,7 @@ const Thread = ({ notification }: ThreadProps) => {
       <div className="h-[var(--top-nav-height)] border-b px-4 w-full flex items-center justify-between">
         <div className="flex gap-2 items-center">
           <NotificationIcon notification={notification} />
-          <span className="truncate w-[40rem]">
+          <span className="truncate w-[calc(100vw-(var(--sidebar-width)+var(--inbox-width)+(var(--margin)*2))-20rem)]">
             {notification.subject.title}
           </span>
         </div>

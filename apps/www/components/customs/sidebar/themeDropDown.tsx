@@ -8,7 +8,6 @@ import {
   DropdownMenuPortal,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -50,7 +49,6 @@ const ThemeDropDown = () => {
       <DropdownMenuPortal>
         <DropdownMenuSubContent>
           <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
-            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuRadioItem className="gap-3" value="light">
                 <Sun

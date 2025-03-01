@@ -3,6 +3,7 @@ const nextConfig = {
   transpilePackages: ["@noutify/ui"],
   experimental: {
     useCache: true,
+    nodeMiddleware: true,
   },
 };
 

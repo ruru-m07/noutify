@@ -5,6 +5,7 @@ import NextTopLoader from "nextjs-toploader";
 import { ContextProvider } from "@/context";
 
 import "@noutify/ui/globals.css";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
   title: "Noutify",
@@ -16,6 +17,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -51,7 +54,7 @@ export default async function RootLayout({
           zIndex={1600}
           showAtBottom={false}
         />
-        <ContextProvider>{children}</ContextProvider>
+        <ContextProvider session={session}>{children}</ContextProvider>
       </body>
     </html>
   );

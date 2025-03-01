@@ -1,6 +1,16 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import { env } from "@noutify/env";
+import { PrismaClient } from "@prisma/client";
+import { PrismaNeon } from "@prisma/adapter-neon";
+import { Pool } from "@neondatabase/serverless";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+
+const neon = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+const adapter = new PrismaNeon(neon);
+const prisma = new PrismaClient({ adapter });
 
 export const {
   handlers,
@@ -10,6 +20,8 @@ export const {
   unstable_update: update,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: any = NextAuth({
+  // @ts-expect-error - PrismaAdapter is not in the types
+  adapter: PrismaAdapter(prisma),
   providers: [
     GitHub({
       clientId: env.OAUTH_GITHUB_ID,

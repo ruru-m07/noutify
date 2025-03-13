@@ -13,7 +13,7 @@ interface ThreadProps {
 const Thread = ({ notification }: ThreadProps) => {
   return (
     <>
-      <div className="h-[var(--top-nav-height)] border-b px-4 w-full flex items-center justify-between">
+      <div className="h-[var(--top-nav-height)] border-b px-4 w-full flex items-center justify-between bg-primary-foreground/75">
         <div className="flex gap-2 items-center">
           <NotificationIcon notification={notification} />
           <span className="truncate w-[calc(100vw-(var(--sidebar-width)+var(--inbox-width)+(var(--margin)*2))-20rem)]">
@@ -24,7 +24,7 @@ const Thread = ({ notification }: ThreadProps) => {
           <div className="text-muted-foreground transition-all">
             <Link
               className="hover:underline hover:text-primary"
-              href={notification.repository.owner.html_url}
+              href={`https://github.com/${notification.repository.owner.login}`}
               target="_blank"
             >
               {notification.repository.owner.login}
@@ -32,7 +32,7 @@ const Thread = ({ notification }: ThreadProps) => {
             {" / "}
             <Link
               className="hover:underline hover:text-primary"
-              href={`${notification.repository.owner.html_url}/${notification.repository.name}`}
+              href={`https://github.com/${notification.repository.owner.login}/${notification.repository.name}`}
               target="_blank"
             >
               {notification.repository.name}
@@ -42,7 +42,7 @@ const Thread = ({ notification }: ThreadProps) => {
           {notification.subject.type === "PullRequest" && (
             <Link
               target="_blank"
-              href={notification.pullRequest?.html_url || ""}
+              href={`https://github.com/${notification.repository.owner.login}/${notification.repository.name}/pull/${notification.subject.url.split("/").pop()}`}
             >
               <Button variant={"ghost"} size={"sm"} className="text-sm">
                 {notification.subject.type === "PullRequest" &&

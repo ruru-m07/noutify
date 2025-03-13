@@ -19,6 +19,7 @@ export default async function middleware(req: NextRequest) {
   if (
     pathname.startsWith("/_next/") ||
     pathname.startsWith("/favicon.ico") ||
+    pathname.startsWith("/favicon/") ||
     pathname.startsWith("/assets/")
   ) {
     return NextResponse.next();

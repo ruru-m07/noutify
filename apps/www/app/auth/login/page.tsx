@@ -10,7 +10,7 @@ import Logo from "@/components/customs/logo";
 
 export default async function LoginPage() {
   const session = await auth();
-
+  
   if (session) {
     redirect("/");
   }

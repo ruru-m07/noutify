@@ -14,6 +14,16 @@ import {
 import Logo from "../logo";
 import SideBarItems from "./items";
 import AvatarDropdown from "./avatarDropdown";
+import { Button } from "@noutify/ui/components/button";
+import {
+  BookMarked,
+  CircleDot,
+  GitPullRequestArrow,
+  Inbox,
+  Plus,
+  Settings,
+  Star,
+} from "lucide-react";
 
 const Sidebar = async () => {
   const session = await auth();
@@ -35,38 +45,125 @@ const Sidebar = async () => {
               />
               <div className="space-y-1">
                 <p className="text-sm font-sans">
-                  Powered by{" "}
+                  By{" "}
                   <Link
                     target="_blank"
-                    href={"https://x.com/catraHQ"}
+                    href={"https://x.com/ruru_dev07"}
                     className="font-extrabold underline"
                   >
-                    @Catra
+                    @Ruru
                   </Link>
                 </p>
                 <p className="text-sm text-muted-foreground">
                   This project is maintained by{" "}
-                  <span className="text-primary">Catra</span>, a non-profit
-                  organization dedicated to providing open-source projects for
-                  developers. All our projects are free to use and open source.
-                  Our goal is to enhance the development experience for
-                  developers.
-                  <Link
-                    href={""}
-                    target="_blank"
-                    className="text-primary underline ml-1"
-                  >
-                    Learn more
-                  </Link>
+                  <span className="inline-block">
+                    <Link
+                      href="https://github.com/ruru-m07"
+                      target="_blank"
+                      className="text-primary underline"
+                    >
+                      Ruru {" 😽 "}
+                    </Link>
+                  </span>
+                  . It is free to use and{" "}
+                  <span className="inline-block">
+                    <Link
+                      href="https://github.com/ruru-m07/noutify"
+                      target="_blank"
+                      className="text-primary underline"
+                    >
+                      open source ( ⭐ )
+                    </Link>
+                  </span>
+                  . If you like our projects, please consider{" "}
+                  <span className="inline-block">
+                    <Link
+                      href="https://github.com/sponsors/ruru-m07"
+                      target="_blank"
+                      className="text-primary underline"
+                    >
+                      supporting us 💝 :3
+                    </Link>
+                  </span>
                 </p>
               </div>
             </div>
           </HoverCardContent>
         </HoverCard>
 
-        <div className="my-2" />
-
-        <SideBarItems />
+        <div className="flex flex-col items-center gap-1">
+          <div className="my-1 h-px w-full" />
+          <SideBarItems
+            items={[
+              {
+                icon: Inbox,
+                name: "Inbox",
+                href: "/",
+              },
+              {
+                icon: GitPullRequestArrow,
+                name: "pull requests",
+                href: "/pulls",
+              },
+              {
+                icon: CircleDot,
+                name: "Issues",
+                href: "/issues",
+              },
+            ]}
+          />
+          <div className="my-1 h-px w-full bg-border" />
+          {/* // TODO: we will forward to do some kindof sortcuts */}
+          {[
+            "ruru-m07",
+            "github",
+            "supabase",
+            "vercel",
+            "shadcn",
+            "shadcn-ui",
+            "manuarora700",
+            "aceternity",
+            "oraczen",
+          ].map((v, i) => (
+            <Button key={i} variant="ghost" size={"icon"}>
+              <Image
+                src={`https://github.com/${v}.png`}
+                alt="vercel"
+                width={30}
+                height={30}
+                className="rounded-md"
+              />
+            </Button>
+          ))}
+          <Button variant="ghost" size={"icon"}>
+            <Plus
+              className="opacity-60"
+              size={20}
+              strokeWidth={2}
+              aria-hidden="true"
+            />
+          </Button>
+          <div className="my-1 h-px w-full bg-border" />
+          <SideBarItems
+            items={[
+              {
+                icon: Star,
+                href: "/starred",
+                name: "Starred",
+              },
+              {
+                icon: BookMarked,
+                href: "/repositories",
+                name: "Repositories",
+              },
+              {
+                icon: Settings,
+                href: "/settings",
+                name: "Settings",
+              }
+            ]}
+          />
+        </div>
       </div>
 
       <div className="m-2">

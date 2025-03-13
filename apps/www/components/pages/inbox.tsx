@@ -39,7 +39,7 @@ const Inbox = () => {
   return (
     <>
       <div className="w-[--inbox-width] border-r">
-        <div className="h-[var(--top-nav-height)] border-b px-4 flex items-center justify-between">
+        <div className="h-[var(--top-nav-height)] border-b px-4 flex items-center justify-between bg-primary-foreground/75">
           <div>Inbox</div>
           <div>
             <Popover>
@@ -181,7 +181,7 @@ const Inbox = () => {
             : notifications.map((notification, i) => (
                 <div
                   key={i}
-                  className="relative rounded-md hover:bg-accent p-4 flex gap-2 cursor-pointer h-[4.5rem]"
+                  className="relative rounded-md hover:bg-primary-foreground/75 p-4 flex gap-2 cursor-pointer h-[4.5rem]"
                   onClick={() => {
                     console.log({
                       notification,

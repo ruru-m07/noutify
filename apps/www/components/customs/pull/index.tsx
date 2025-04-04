@@ -13,7 +13,6 @@ import {
   ListCheck,
   MessagesSquare,
   MoveRight,
-  Smile,
 } from "lucide-react";
 import { cn } from "@noutify/ui/lib/utils";
 import { H4, Muted } from "@/components/typography";
@@ -34,48 +33,33 @@ import { ScrollArea } from "@noutify/ui/components/scroll-area";
 
 import * as timeago from "timeago.js";
 import Image from "next/image";
+import Reactions from "../comment/reactions";
 
 interface PullProps {
   pullRequest:
-  | RestEndpointMethodTypes["pulls"]["get"]["response"]["data"]
-  | null;
+    | RestEndpointMethodTypes["pulls"]["get"]["response"]["data"]
+    | null;
+  reactionData:
+    | RestEndpointMethodTypes["reactions"]["listForIssue"]["response"]["data"]
+    | null;
   num: string;
   repo: string;
   user: string;
 }
 
-export const PullRequest = ({ pullRequest, num, repo, user}: PullProps) => {
-  // const [timelineEvents, setTimelineEvents] = useState<any[]>([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState<string | null>(null);
-
-  // useEffect(() => {
-  //   const fetchTimeline = async () => {
-  //     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-  //     try {
-  //       const { data } = await octokit.request(
-  //         'GET /repos/{owner}/{repo}/issues/{issue_number}/timeline',
-  //         {
-  //           owner: user,
-  //           repo: repo,
-  //           issue_number: parseInt(num),
-  //         }
-  //       );
-  //       setTimelineEvents(data);
-  //     } catch (err) {
-  //       setError("Failed to load timeline events.");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchTimeline();
-  // }, [user, repo, num]);
-
-  // if (loading) return <div>Loading timeline...</div>;
-  // if (error) return <div>{error}</div>;
-
-  if (!pullRequest) return <div>Loading...</div>;
+export const PullRequest = ({
+  pullRequest,
+  reactionData,
+  num,
+  repo,
+  user,
+}: PullProps) => {
+  if (!pullRequest)
+    return (
+      <div className="flex justify-center items-center h-full">
+        <div className="loader">Loading...</div>
+      </div>
+    );
 
   return (
     <div>
@@ -142,13 +126,13 @@ export const PullRequest = ({ pullRequest, num, repo, user}: PullProps) => {
           </H4>
           <Muted className="w-[var(--sectionswidth)] mx-auto flex items-center gap-2 mt-1">
             {pullRequest?.head.label &&
-              pullRequest?.base.label &&
-              pullRequest?.head.label.startsWith(
-                pullRequest?.base.label.split(":")[0] || ""
-              ) &&
-              pullRequest?.base.label.startsWith(
-                pullRequest?.head.label.split(":")[0] || ""
-              ) ? (
+            pullRequest?.base.label &&
+            pullRequest?.head.label.startsWith(
+              pullRequest?.base.label.split(":")[0] || ""
+            ) &&
+            pullRequest?.base.label.startsWith(
+              pullRequest?.head.label.split(":")[0] || ""
+            ) ? (
               <>
                 <Link
                   href={`${pullRequest.html_url}/tree/${pullRequest?.head.ref}`}
@@ -342,13 +326,7 @@ export const PullRequest = ({ pullRequest, num, repo, user}: PullProps) => {
               value="conversation"
               className="w-[var(--sectionswidth)] mx-auto"
             >
-              {/* <Conversation /> */}
-              {/* // ! -------------------------------------------- */}
-              {/* <Markdown markdown={pullRequest.body} /> */}
-              <div
-                // id={`comment-${comment?.number}`}
-                className="flex relative mb-7 w-full border-none shadow-none rounded-md mt-5"
-              >
+              <div className="flex relative mb-7 w-full border-none shadow-none rounded-md mt-5">
                 <div>
                   <Avatar asChild>
                     <Link href={`https://github.com/${pullRequest.user.login}`}>
@@ -372,22 +350,22 @@ export const PullRequest = ({ pullRequest, num, repo, user}: PullProps) => {
                       )}
                     >
                       <p className="text-muted-foreground text-sm">
-                        {pullRequest.user.login} commented { }
+                        {pullRequest.user.login} commented {}
                         {new Date(
                           pullRequest.updated_at || pullRequest.created_at
                         ).getTime() >
-                          Date.now() - 7 * 24 * 60 * 60 * 1000
+                        Date.now() - 7 * 24 * 60 * 60 * 1000
                           ? timeago.format(
-                            pullRequest.updated_at || pullRequest.created_at,
-                            "en_US"
-                          )
+                              pullRequest.updated_at || pullRequest.created_at,
+                              "en_US"
+                            )
                           : new Date(
-                            pullRequest.updated_at || pullRequest.created_at
-                          ).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })}
+                              pullRequest.updated_at || pullRequest.created_at
+                            ).toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            })}
                         {pullRequest.updated_at !== pullRequest.created_at &&
                           " • Edited"}
                       </p>
@@ -395,60 +373,12 @@ export const PullRequest = ({ pullRequest, num, repo, user}: PullProps) => {
                         <Badge
                           variant="outline"
                           className="text-muted-foreground"
-                        // className={`${refData?.author === comment.author ? "border-[#404040]" : ""} ${location.hash === `#comment-${comment.number}` && "border-white"}`}
                         >
                           Contributor
                         </Badge>
-                        {/* <Dialog>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger>
-                            <DotsHorizontalIcon />
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            {comment?.author === user?.username && (
-                              <DialogTrigger asChild>
-                                <DropdownMenuItem>
-                                  <span>Edit</span>
-                                </DropdownMenuItem>
-                              </DialogTrigger>
-                            )}
-                            <DropdownMenuItem
-                              onClick={() =>
-                                !asHeader &&
-                                navigator.clipboard.writeText(
-                                  `${PUBLIC_URL}/${params.username}/${params.repository}/issues/${params.issueNum}#comment-${comment?.number}`
-                                )
-                              }
-                            >
-                              Copy link
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>Report content</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>
-                              Edit comment #{comment?.number}
-                            </DialogTitle>
-                            <DialogDescription>
-                              This action cannot be undone. Are you sure you
-                              want to edit this comment?
-                            </DialogDescription>
-                          </DialogHeader>
-                          <DialogContent>
-                            <Write {...{ textValue, setTextValue }} />
-                          </DialogContent>
-                          <DialogFooter>
-                            <Button type="submit">Confirm</Button>
-                          </DialogFooter>
-                        </DialogContent>
-                      </Dialog> */}
                       </div>
                     </div>
-                    <div className="px-4 pt-2 -mt-5">
+                    <div className="px-4 pt-2">
                       {pullRequest.body && (
                         <Markdown
                           github={`${user}/${repo}`}
@@ -456,15 +386,7 @@ export const PullRequest = ({ pullRequest, num, repo, user}: PullProps) => {
                         />
                       )}
                     </div>
-                    <div className="px-4 mt-6 mb-2 ">
-                      <Button
-                        variant={"ghost"}
-                        className="rounded-full m-0 px-2"
-                      >
-                        <Smile size={20} className="text-muted-foreground" />
-                      </Button>
-                      {/* {pullRequest.} */}
-                    </div>
+                    <Reactions repoUser={user} repoName={repo} pullRequestNumber={num} reactionData={reactionData} />
                   </Card>
                 </div>
               </div>
@@ -486,8 +408,6 @@ export const PullRequest = ({ pullRequest, num, repo, user}: PullProps) => {
             </TabsContent>
           </Tabs>
           <div className="h-screen">{/* // TODO: ------ */}</div>
-
-
         </div>
       </ScrollArea>
     </div>

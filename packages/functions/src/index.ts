@@ -6,6 +6,7 @@ import { ReposAPI } from "./api/repos";
 import { PullsAPI } from "./api/pulls";
 import { IssuesAPI } from "./api/issues";
 import { SearchAPI } from "./api/search";
+import { ReactionsAPI } from "./api/reactions";
 
 export interface GithubClientOptions {
   token: string;
@@ -22,6 +23,7 @@ export class GithubClient {
   public readonly pulls: PullsAPI;
   public readonly issues: IssuesAPI;
   public readonly search: SearchAPI;
+  public readonly reactions: ReactionsAPI;
 
   private octokit: Octokit;
   private apiVersion: string;
@@ -39,5 +41,6 @@ export class GithubClient {
     this.pulls = new PullsAPI(this.octokit, this.apiVersion);
     this.issues = new IssuesAPI(this.octokit, this.apiVersion);
     this.search = new SearchAPI(this.octokit, this.apiVersion);
+    this.reactions = new ReactionsAPI(this.octokit, this.apiVersion);
   }
 }

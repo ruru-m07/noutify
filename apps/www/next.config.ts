@@ -1,4 +1,9 @@
 import type { NextConfig } from "next";
+import bundleAnalyzer from "@next/bundle-analyzer";
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@noutify/ui"],
@@ -14,10 +19,13 @@ const nextConfig: NextConfig = {
     nextScriptWorkers: true,
     viewTransition: true,
     reactCompiler: true,
+    turbo: {
+      memoryLimit: 2048,
+    },
   },
-  // compiler: {
-  //   removeConsole: true,
-  // },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
   images: {
     remotePatterns: [
       {
@@ -34,4 +42,5 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// @ts-expect-error - // ? well some type issue bcuz we are in canary channel.
+export default withBundleAnalyzer(nextConfig);

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { ListFilter, SlidersHorizontal } from "lucide-react";
 
 import { Button } from "@noutify/ui/components/button";
@@ -17,6 +17,7 @@ import Thread from "@/components/threads";
 import NotificationIcon from "@/components/customs/notificationIcon";
 import { Label } from "@noutify/ui/components/label";
 import { Skeleton } from "@noutify/ui/components/skeleton";
+import type { FilterState } from "@/context/appState";
 
 export const dynamic = "force-dynamic";
 
@@ -26,12 +27,19 @@ const Inbox = () => {
     setSelectedNotification,
     selectedNotification,
     isNotificationsLoading,
+    filter,
+    setFilter,
   } = useAppState();
+
+  const [tempFilter, setTempFilter] = useState<FilterState>({
+    all: filter.all,
+    read: filter.read,
+  });
 
   return (
     <>
       <div className="w-[--inbox-width] border-r">
-        <div className="h-[var(--top-nav-height)] border-b px-4 flex items-center justify-between">
+        <div className="h-[var(--top-nav-height)] border-b px-4 flex items-center justify-between bg-primary-foreground/75">
           <div>Inbox</div>
           <div>
             <Popover>
@@ -102,45 +110,55 @@ const Inbox = () => {
                   <div className="text-xs font-medium text-muted-foreground">
                     Filters
                   </div>
-                  <form className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Checkbox id={`id-1`} />
-                      <Label htmlFor={`id-1`} className="font-normal">
-                        Real Time
-                      </Label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Checkbox id={`id-2`} />
-                      <Label htmlFor={`id-2`} className="font-normal">
-                        Top Channels
-                      </Label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Checkbox id={`id-3`} />
-                      <Label htmlFor={`id-3`} className="font-normal">
-                        Last Orders
-                      </Label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Checkbox id={`id-4`} />
-                      <Label htmlFor={`id-4`} className="font-normal">
-                        Total Spent
-                      </Label>
-                    </div>
+                  <div className="space-y-3">
+                    {Object.keys(tempFilter).map((key) => (
+                      <div key={key} className="flex items-center gap-2">
+                        <Checkbox
+                          id={`id-${key}`}
+                          checked={tempFilter[key as keyof FilterState]}
+                          onCheckedChange={(checked) =>
+                            setTempFilter((prev) => ({
+                              ...prev,
+                              [key]: checked,
+                            }))
+                          }
+                        />
+                        <Label htmlFor={`id-${key}`} className="font-normal">
+                          {key.charAt(0).toUpperCase() + key.slice(1)}
+                        </Label>
+                      </div>
+                    ))}
+
                     <div
                       role="separator"
                       aria-orientation="horizontal"
                       className="-mx-3 my-1 h-px bg-border"
                     ></div>
                     <div className="flex justify-between gap-2">
-                      <Button size="sm" variant="outline" className="h-7 px-2">
+                      <Button
+                        onClick={() => {
+                          setTempFilter({
+                            all: false,
+                            read: true,
+                          });
+                        }}
+                        size="sm"
+                        variant="outline"
+                        className="h-7 px-2"
+                      >
                         Clear
                       </Button>
-                      <Button size="sm" className="h-7 px-2">
+                      <Button
+                        onClick={() => {
+                          setFilter(tempFilter);
+                        }}
+                        size="sm"
+                        className="h-7 px-2"
+                      >
                         Apply
                       </Button>
                     </div>
-                  </form>
+                  </div>
                 </div>
               </PopoverContent>
             </Popover>
@@ -163,7 +181,7 @@ const Inbox = () => {
             : notifications.map((notification, i) => (
                 <div
                   key={i}
-                  className="relative rounded-md hover:bg-accent p-4 flex gap-2 cursor-pointer h-[4.5rem]"
+                  className="relative rounded-md hover:bg-primary-foreground/75 p-4 flex gap-2 cursor-pointer h-[4.5rem]"
                   onClick={() => {
                     console.log({
                       notification,
@@ -197,7 +215,9 @@ const Inbox = () => {
         {selectedNotification ? (
           <Thread notification={selectedNotification} />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">Select a notification to view</div>
+          <div className="w-full h-full flex items-center justify-center">
+            Select a notification to view
+          </div>
         )}
       </div>
     </>

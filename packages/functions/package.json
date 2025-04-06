@@ -5,6 +5,9 @@
   "exports": {
     ".": {
       "import": "./src/index.ts"
+    },
+    "./custom/api": {
+      "import": "./src/custom/index.ts"
     }
   },
   "devDependencies": {
@@ -15,6 +18,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@octokit/rest": "^21.1.0"
+    "@octokit/rest": "^21.1.0",
+    "zod": "^3.24.2"
   }
 }

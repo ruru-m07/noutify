@@ -19,6 +19,7 @@ export default async function middleware(req: NextRequest) {
   if (
     pathname.startsWith("/_next/") ||
     pathname.startsWith("/favicon.ico") ||
+    pathname.startsWith("/favicon/") ||
     pathname.startsWith("/assets/")
   ) {
     return NextResponse.next();
@@ -51,4 +52,5 @@ export default async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  runtime: 'nodejs',
 };

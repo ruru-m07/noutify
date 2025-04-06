@@ -1,13 +1,11 @@
-import React from "react";
+import React from 'react'
 
-const PullsPage = () => {
+const Page = () => {
   return (
-    <>
-      <div className="flex items-center justify-center w-full h-full">
-        soon :3
-      </div>
-    </>
-  );
-};
+    <div className='h-full w-full flex justify-center items-center'>
+        select pull and see magic
+    </div>
+  )
+}
 
-export default PullsPage;
+export default Page

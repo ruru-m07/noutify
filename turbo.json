@@ -20,6 +20,9 @@
       "outputs": [".next/**", "!.next/cache/**"],
       "env": ["OAUTH_GITHUB_ID", "OAUTH_GITHUB_SECRET", "AUTH_SECRET", "DATABASE_URL"] 
     },
+    "start": {
+      "env": ["OAUTH_GITHUB_ID", "OAUTH_GITHUB_SECRET", "AUTH_SECRET", "DATABASE_URL"] 
+    },
     "lint": {
       "dependsOn": ["^lint", "^db:generate"]
     },

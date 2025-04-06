@@ -1,22 +1,18 @@
-"use client";
+// "use client";
 
 import React from "react";
 
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@noutify/ui/components/tooltip";
-import { Button } from "@noutify/ui/components/button";
+import { buttonVariants } from "@noutify/ui/components/button";
+// import { cn } from "@noutify/ui/lib/utils";
+import { type LucideIcon } from "lucide-react";
 import { cn } from "@noutify/ui/lib/utils";
-import {
-  CircleDot,
-  GitPullRequestArrow,
-  Inbox,
-  type LucideIcon,
-} from "lucide-react";
 
 type Item = {
   icon: LucideIcon;
@@ -24,35 +20,19 @@ type Item = {
   href: string;
 };
 
-const SideBarItems: React.FC = () => {
-  const pathname = usePathname();
-
-  const items: Item[] = [
-    {
-      icon: Inbox,
-      name: "Inbox",
-      href: "/",
-    },
-    {
-      icon: GitPullRequestArrow,
-      name: "pull requests",
-      href: "/pulls",
-    },
-    {
-      icon: CircleDot,
-      name: "Issues",
-      href: "/issues",
-    },
-  ];
+const SideBarItems: React.FC<{
+  items: Item[];
+}> = ({ items }) => {
+  // const pathname = usePathname();
 
   return items.map((item: Item) => (
-    <Link href={item.href} key={item.name}>
+    <div key={item.name}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size={"icon"}
-            className={cn(pathname === item.href && "bg-accent")}
+          <Link
+            href={item.href}
+            className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
+            // className={cn(pathname === item.href && "bg-accent")}
           >
             <item.icon
               className="opacity-60"
@@ -60,13 +40,13 @@ const SideBarItems: React.FC = () => {
               strokeWidth={2}
               aria-hidden="true"
             />
-          </Button>
+          </Link>
         </TooltipTrigger>
         <TooltipContent side="left" className="px-2 py-1 text-xs">
           {item.name}
         </TooltipContent>
       </Tooltip>
-    </Link>
+    </div>
   ));
 };
 

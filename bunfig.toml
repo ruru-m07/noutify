@@ -1,2 +1,4 @@
+logLevel = "debug"
+
 [install]
 saveTextLockfile = false

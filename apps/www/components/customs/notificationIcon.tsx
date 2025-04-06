@@ -60,15 +60,6 @@ export const getPullRequestIcon = (
       />
     );
   }
-  if (pullRequest?.state === "open") {
-    return (
-      <GitPullRequestArrow
-        className="text-green-500"
-        size={20}
-        strokeWidth={1.5}
-      />
-    );
-  }
   if (pullRequest?.draft) {
     return (
       <GitPullRequestDraft
@@ -78,6 +69,16 @@ export const getPullRequestIcon = (
       />
     );
   }
+  if (pullRequest?.state === "open") {
+    return (
+      <GitPullRequestArrow
+        className="text-green-500"
+        size={20}
+        strokeWidth={1.5}
+      />
+    );
+  }
+
   return null;
 };
 

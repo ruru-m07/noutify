@@ -419,9 +419,6 @@ export const PullRequest = ({
                     threadNumber={num}
                   />
                 )}
-
-                <div className="w-0.5 h-3 bg-secondary ml-[5.5rem]" />
-                <div className="w-full h-[3px] rounded-full bg-secondary" />
               </div>
             </TabsContent>
             <TabsContent value="commits">

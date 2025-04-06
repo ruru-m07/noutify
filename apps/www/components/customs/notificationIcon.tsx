@@ -47,17 +47,9 @@ export const getIssueIcon = (
 export const getPullRequestIcon = (
   pullRequest: RestEndpointMethodTypes["pulls"]["get"]["response"]["data"]
 ) => {
-  if (pullRequest?.merged) {
+  // @ts-expect-error - when we fetch PR VIA restAPI it doesn't have merged
+  if (pullRequest?.merged || pullRequest.pull_request?.merged_at) {
     return <GitMerge className="text-purple-500" size={20} strokeWidth={1.5} />;
-  }
-  if (pullRequest?.draft) {
-    return (
-      <GitPullRequestDraft
-        className="text-gray-400"
-        size={20}
-        strokeWidth={1.5}
-      />
-    );
   }
   if (!pullRequest?.merged && pullRequest?.state === "closed") {
     return (
@@ -72,6 +64,15 @@ export const getPullRequestIcon = (
     return (
       <GitPullRequestArrow
         className="text-green-500"
+        size={20}
+        strokeWidth={1.5}
+      />
+    );
+  }
+  if (pullRequest?.draft) {
+    return (
+      <GitPullRequestDraft
+        className="text-gray-400"
         size={20}
         strokeWidth={1.5}
       />

@@ -1,6 +1,0 @@
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "turbo run db:generate && turbo run build",
-  "installCommand": "bun install --production",
-  "framework": "nextjs"
-}

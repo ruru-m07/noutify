@@ -471,7 +471,7 @@ export const PullRequest = ({
               </p>
             </TabsContent>
           </Tabs>
-          <div className="h-screen">{/* // TODO: ------ */}</div>
+          <div className="h-32">{/* // TODO: ------ */}</div>
         </div>
       </ScrollArea>
     </div>

@@ -91,7 +91,7 @@ export const PullRequest = ({
           </span>
         </div>
         <div className="gap-2 flex items-center">
-          <div className="text-muted-foreground transition-all">
+          <span className="flex gap-2 text-muted-foreground transition-all text-nowrap">
             <Link
               className="hover:underline hover:text-primary"
               href={`https://github.com/${user}`}
@@ -107,7 +107,7 @@ export const PullRequest = ({
             >
               {repo}
             </Link>
-          </div>
+          </span>
 
           <Link
             className={cn(
@@ -420,6 +420,32 @@ export const PullRequest = ({
                   />
                 )}
               </div>
+              {/* To get the margeable check we need 3 api calla
+               *
+               * 1.
+               * /{user}/{repo}/pulls/{num}
+               * Look for the "head" object in the response to get the commit SHA (e.g., "sha": "a3b7bbf5ab9f0875d26ce672de05dea34fd21087").
+               *
+               * 2.
+               * Get the status of the latest commit:
+               * curl -H "Accept: application/vnd.github.v3+json" \
+               * /{user}/{repo}/commits/a3b7bbf5ab9f0875d26ce672de05dea34fd21087/status
+               *
+               * 3.
+               * curl -H "Accept: application/vnd.github.v3+json" \
+               * /{user}/{repo}/commits/a3b7bbf5ab9f0875d26ce672de05dea34fd21087/check-runs
+               *
+               * we need to merge the 2 and 3 step to get all the checks
+               *
+               * some things in pull req data
+               * - mergeable_state = "unstable" | "clean"
+               * - mergeable
+               * - merged
+               * - rebaseable
+               * - merged_by
+               * - head.sha
+               *
+               */}
             </TabsContent>
             <TabsContent value="commits">
               <p className="pt-1 text-center text-xs text-muted-foreground">
@@ -427,6 +453,14 @@ export const PullRequest = ({
               </p>
             </TabsContent>
             <TabsContent value="checks">
+              {/*
+               *  /{user}/{repo}/pulls/{num}
+               *  head.sha
+               *  /{user}/{repo}/commits/{sha}/check-runs
+               *
+               * ! we don't waant statis anymore
+               *
+               */}
               <p className="pt-1 text-center text-xs text-muted-foreground">
                 Content for Checks
               </p>
@@ -444,7 +478,7 @@ export const PullRequest = ({
   );
 };
 
-function adjustLabelColor(color: string, mode: "light" | "dark") {
+export function adjustLabelColor(color: string, mode: "light" | "dark") {
   const hexToRgb = (hex: string) => {
     const bigint = parseInt(hex, 16);
     const r = (bigint >> 16) & 255;

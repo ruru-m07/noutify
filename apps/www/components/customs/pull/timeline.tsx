@@ -394,6 +394,7 @@ const Timeline = async ({
 
             case "reviewed": {
               const reviewComment = listReviewComments.find(
+                // @ts-expect-error - // TODO(ruru-m07): will force type 
                 (comment) => comment.pull_request_review_id === event.id
               );
 

@@ -41,11 +41,31 @@ export class PullsAPI {
     owner: string,
     repo: string,
     pull_number: number
-  ): Promise<RestEndpointMethodTypes["issues"]["listEventsForTimeline"]["response"]["data"]> {
+  ): Promise<
+    RestEndpointMethodTypes["issues"]["listEventsForTimeline"]["response"]["data"]
+  > {
     const response = await this.octokit.issues.listEventsForTimeline({
       owner,
       repo,
       issue_number: pull_number,
+      per_page: 100,
+      headers: getGitHubHeaders(this.apiVersion),
+    });
+
+    return response.data;
+  }
+
+  async listReviewComments(
+    owner: string,
+    repo: string,
+    pull_number: number
+  ): Promise<
+    RestEndpointMethodTypes["pulls"]["listReviewComments"]["response"]["data"]
+  > {
+    const response = await this.octokit.pulls.listReviewComments({
+      owner,
+      repo,
+      pull_number,
       headers: getGitHubHeaders(this.apiVersion),
     });
 

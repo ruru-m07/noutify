@@ -34,6 +34,7 @@ import { ScrollArea } from "@noutify/ui/components/scroll-area";
 import * as timeago from "timeago.js";
 import Image from "next/image";
 import Reactions from "../comment/reactions";
+import Timeline from "./timeline";
 
 interface PullProps {
   pullRequest:
@@ -41,6 +42,9 @@ interface PullProps {
     | null;
   reactionData:
     | RestEndpointMethodTypes["reactions"]["listForIssue"]["response"]["data"]
+    | null;
+  timeline:
+    | RestEndpointMethodTypes["issues"]["listEventsForTimeline"]["response"]["data"]
     | null;
   num: string;
   repo: string;
@@ -50,6 +54,7 @@ interface PullProps {
 export const PullRequest = ({
   pullRequest,
   reactionData,
+  timeline,
   num,
   repo,
   user,
@@ -326,7 +331,8 @@ export const PullRequest = ({
               value="conversation"
               className="w-[var(--sectionswidth)] mx-auto"
             >
-              <div className="flex relative mb-7 w-full border-none shadow-none rounded-md mt-5">
+              {/* // ! the PR desc  */}
+              <div className="flex relative w-full border-none shadow-none rounded-md mt-5">
                 <div>
                   <Avatar asChild>
                     <Link href={`https://github.com/${pullRequest.user.login}`}>
@@ -379,16 +385,43 @@ export const PullRequest = ({
                       </div>
                     </div>
                     <div className="px-4 pt-2">
-                      {pullRequest.body && (
+                      {pullRequest.body ? (
                         <Markdown
                           github={`${user}/${repo}`}
                           markdown={pullRequest.body}
                         />
+                      ) : (
+                        <span className="text-muted-foreground text-sm">
+                          No description provided.
+                        </span>
                       )}
                     </div>
-                    <Reactions repoUser={user} repoName={repo} pullRequestNumber={num} reactionData={reactionData} />
+                    <Reactions
+                      repoUser={user}
+                      repoName={repo}
+                      pullRequestNumber={num}
+                      reactionData={reactionData}
+                    />
                   </Card>
                 </div>
+              </div>
+              <div className="">
+                <div className="w-0.5 h-2 bg-secondary ml-[5.5rem]" />
+                {timeline && timeline.length > 0 && (
+                  <Timeline
+                    timeline={timeline.filter(
+                      (event) =>
+                        event.event !== "mentioned" &&
+                        event.event !== "subscribed"
+                    )}
+                    repoName={repo}
+                    repoUser={user}
+                    threadNumber={num}
+                  />
+                )}
+
+                <div className="w-0.5 h-3 bg-secondary ml-[5.5rem]" />
+                <div className="w-full h-[3px] rounded-full bg-secondary" />
               </div>
             </TabsContent>
             <TabsContent value="commits">

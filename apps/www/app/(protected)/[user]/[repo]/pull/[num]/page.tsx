@@ -1,6 +1,8 @@
-import { PullRequest } from "@/components/customs/pull";
-import { getGithubClient } from "@/lib/ghClient";
 import React from "react";
+
+import { getGithubClient } from "@/lib/ghClient";
+
+import { PullRequest } from "@/components/customs/pull";
 
 const page = async ({
   params,
@@ -15,12 +17,14 @@ const page = async ({
     repo,
     Number(num)
   );
+  const timeline = await ghClient.pulls.listEvents(user, repo, Number(num));
 
   return (
     <div className="w-full h-full flex flex-col">
       <PullRequest
         pullRequest={pullData}
         reactionData={reactionData}
+        timeline={timeline}
         num={num}
         repo={repo}
         user={user}

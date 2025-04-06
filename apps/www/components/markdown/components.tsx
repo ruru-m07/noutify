@@ -29,7 +29,7 @@ export const components = {
   h2: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h2
       className={cn(
-        "group font-heading mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0",
+        "group font-heading mt-4 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0",
         className
       )}
       {...props}
@@ -38,7 +38,7 @@ export const components = {
   h3: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h3
       className={cn(
-        "group font-heading mt-8 scroll-m-20 text-xl font-semibold tracking-tight",
+        "group font-heading mt-4 scroll-m-20 text-xl font-semibold tracking-tight",
         className
       )}
       {...props}
@@ -47,7 +47,7 @@ export const components = {
   h4: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h4
       className={cn(
-        "group font-heading mt-8 scroll-m-20 text-lg font-semibold tracking-tight",
+        "group font-heading mt-4 scroll-m-20 text-lg font-semibold tracking-tight",
         className
       )}
       {...props}
@@ -56,7 +56,7 @@ export const components = {
   h5: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h5
       className={cn(
-        "group mt-8 scroll-m-20 text-lg font-semibold tracking-tight",
+        "group mt-4 scroll-m-20 text-lg font-semibold tracking-tight",
         className
       )}
       {...props}
@@ -94,7 +94,7 @@ export const components = {
   ),
   blockquote: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
     <blockquote
-      className={cn("mt-6 border-l-2 pl-6 italic", className)}
+      className={cn("mt-1 border-l-2 pl-6 italic", className)}
       {...props}
     />
   ),

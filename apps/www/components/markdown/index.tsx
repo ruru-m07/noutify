@@ -5,6 +5,7 @@ import remarkGithub, { defaultBuildUrl } from "remark-github";
 import { remark } from "remark";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
+import rehypeRaw from "rehype-raw";
 import { components } from "./components";
 
 async function Markdown({
@@ -36,7 +37,7 @@ async function Markdown({
     <div className="markdown-container">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkGemoji, remarkMath]}
-        rehypePlugins={[rehypeKatex]}
+        rehypePlugins={[rehypeKatex, rehypeRaw]}
         components={{
           ...components,
         }}

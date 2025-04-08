@@ -22,7 +22,9 @@ const nextConfig: NextConfig = {
     turbo: {
       memoryLimit: 2048,
     },
+    ppr: true,
   },
+  cacheMaxMemorySize: 0,
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },

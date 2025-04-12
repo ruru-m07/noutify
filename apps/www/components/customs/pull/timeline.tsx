@@ -745,11 +745,15 @@ const CommittedEvent = async ({
               size={19}
             />
           )}
-          <img
-            src={commit.author.avatar_url}
-            alt={commit.author.login}
-            className="size-5 rounded-full"
-          />{" "}
+          {commit.author && commit.author.avatar_url ? (
+            <img
+              src={commit.author.avatar_url}
+              alt={commit.author.login || "Unknown user"}
+              className="size-5 rounded-full"
+            />
+          ) : (
+            <div className="size-5 rounded-full bg-secondary" />
+          )}{" "}
           <p
             className={cn(
               "w-[45rem] truncate group-hover:text-primary/65",

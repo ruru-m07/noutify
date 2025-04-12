@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-
 import { getPullRequestIcon } from "@/components/customs/notificationIcon";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import Link from "next/link";
@@ -25,9 +23,7 @@ export default function PullRequestItem({
         ""
       )}/${number}`}
       className="relative rounded-md hover:bg-primary-foreground/75 p-4 flex gap-2 cursor-pointer h-[4.5rem]"
-      onClick={() => {
-        console.log(pr);
-      }}
+      prefetch
     >
       <div className="w-8 h-8 flex items-center justify-center">
         {getPullRequestIcon(pr as any)}

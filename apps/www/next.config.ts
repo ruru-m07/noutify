@@ -7,6 +7,8 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@noutify/ui"],
+  // TODO(ruru-m07): Implement standalone output configuration for desctop builds.
+  // output: "standalone",
   experimental: {
     serverActions: {
       bodySizeLimit: "2mb",
@@ -15,16 +17,13 @@ const nextConfig: NextConfig = {
     nodeMiddleware: true,
     parallelServerBuildTraces: true,
     webpackBuildWorker: true,
-    memoryBasedWorkersCount: true,
     nextScriptWorkers: true,
     viewTransition: true,
     reactCompiler: true,
-    turbo: {
-      memoryLimit: 2048,
-    },
     ppr: true,
   },
-  cacheMaxMemorySize: 0,
+  // TODO: will make a seprate build for the server and client.
+  // cacheMaxMemorySize: 0,
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },

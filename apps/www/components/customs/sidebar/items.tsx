@@ -33,6 +33,7 @@ const SideBarItems: React.FC<{
             href={item.href}
             className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
             // className={cn(pathname === item.href && "bg-accent")}
+            prefetch
           >
             <item.icon
               className="opacity-60"

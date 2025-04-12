@@ -36,7 +36,7 @@ export const CommitSchema = z.object({
     login: z.string(),
     id: z.number(),
     node_id: z.string(),
-    avatar_url: z.string().url(),
+    avatar_url: z.string().optional(),
     gravatar_id: z.string(),
     url: z.string().url(),
     html_url: z.string().url(),
@@ -57,7 +57,7 @@ export const CommitSchema = z.object({
     login: z.string(),
     id: z.number(),
     node_id: z.string(),
-    avatar_url: z.string().url(),
+    avatar_url: z.string().optional(),
     gravatar_id: z.string(),
     url: z.string().url(),
     html_url: z.string().url(),
@@ -117,7 +117,7 @@ export async function getCommit(
       headers: {
         Accept: "application/vnd.github+json",
         Authorization: `Bearer ${token}`,
-        "X-GitHub-Api-Version": "2022-11-28"
+        "X-GitHub-Api-Version": "2022-11-28",
       },
     }
   );
@@ -131,10 +131,11 @@ export async function getCommit(
   try {
     return CommitSchema.parse(data);
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      console.error("Validation error:", error.format());
-      throw new Error(`Invalid commit data: ${error.message}`);
-    }
-    throw error;
+    return data;
+    // if (error instanceof z.ZodError) {
+    //   console.error("Validation error:", error.format());
+    //   return data;
+    // }
+    // throw error;
   }
 }

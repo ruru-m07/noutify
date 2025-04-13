@@ -25,32 +25,32 @@ files:
 #         - universal
 
 # --- Windows configuration: Three artifacts (User Installer, System Installer, and .zip) for x64 and Arm64 ---
-# win:
-  # target:
+win:
+  target:
     # User Installer (default NSIS)
-    # - target: nsis
-    #   arch:
-    #     - x64
-    #     - arm64
+    - target: nsis
+      arch:
+        - x64
+        - arm64
     # System Installer (using NSIS with perMachine set to true)
-    # - target:
-    #     name: nsis
-    #     artifactName: "${productName}-System-Installer-${arch}.${ext}"
-    #   arch:
-    #     - x64
-    #     - arm64
-    #   config:
-    #     perMachine: true
-    # # Archive (.zip)
-    # - target: zip
-    #   arch:
-    #     - x64
-    #     - arm64
+    - target:
+        name: nsis
+        artifactName: "${productName}-System-Installer-${arch}.${ext}"
+      arch:
+        - x64
+        - arm64
+      config:
+        perMachine: true
+    # Archive (.zip)
+    - target: zip
+      arch:
+        - x64
+        - arm64
 
 # --- Linux configuration: Four artifacts (Deb, RPM, Tar.gz, and Snap) for x64, Armv7l, and Arm64 ---
 # Note: The Snap target is not available for Armv7l, so it is excluded from that architecture.
-linux:
-  target:
+# linux:
+#   target:
     # - target: deb
     #   arch:
     #     - x64
@@ -61,9 +61,9 @@ linux:
     #     - x64
     #     - armv7l
     #     - arm64
-    - target: tar.gz
-      arch:
-        - x64
+    # - target: tar.gz
+    #   arch:
+    #     - x64
         # - armv7l
         # - arm64
     # - target: snap

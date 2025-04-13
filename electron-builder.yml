@@ -48,8 +48,8 @@ files:
 
 # --- Linux configuration: Four artifacts (Deb, RPM, Tar.gz, and Snap) for x64, Armv7l, and Arm64 ---
 # Note: The Snap target is not available for Armv7l, so it is excluded from that architecture.
-linux:
-  target:
+# linux:
+#   target:
     # - target: deb
     #   arch:
     #     - x64

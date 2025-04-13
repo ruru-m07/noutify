@@ -2,8 +2,8 @@
   "name": "noutify",
   "private": true,
   "scripts": {
-    "build": "dotenv -- turbo run build --env-mode=loose",
-    "dev": "dotenv -- turbo run dev --env-mode=loose",
+    "build": "dotenv -- turbo run build",
+    "dev": "dotenv -- turbo run dev",
     "lint": "dotenv -- turbo lint",
     "start": "dotenv -- turbo start",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

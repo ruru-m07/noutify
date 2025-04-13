@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-
+        
     steps:
 
       - name: Checkout repository
@@ -37,13 +37,22 @@ jobs:
       - name: cd to build directory
         run: cd apps/desktop
         
-      - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1
-        with:
-          # GitHub token, automatically provided to the action
-          # (No need to define this secret in the repo settings)
-          github_token: ${{ secrets.github_token }}
+      # Only decode certificate for platforms that require code signing
+      - name: Setup code signing certificate
+        if: matrix.platform == 'mac' || matrix.platform == 'win'
+        run: |
+          echo "$CSC_LINK" | base64 -d > cert.p12
+        env:
+          CSC_LINK: ${{ secrets.CSC_LINK }}
 
-          # If the commit is tagged with a version (e.g. "v1.0.0"),
-          # release the app after building
-          # release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+      - name: Build Electron App for ${{ matrix.platform }}
+        run: bunx electron-builder --config electron-builder.yml -mwl
+        env:
+          CSC_LINK: ${{ runner.workspace }}/cert.p12  # pointing to the local file
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: ${{ matrix.platform }}-build
+          path: dist/*

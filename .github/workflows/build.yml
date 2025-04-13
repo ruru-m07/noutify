@@ -37,7 +37,7 @@ jobs:
         run: bun install
 
       - name: Run build
-        run: bun run build
+        run: bunx turbo db:generate && bun run build --filter desktop
   
       - name: cd to build directory
         run: cd apps/desktop
@@ -51,7 +51,7 @@ jobs:
           CSC_LINK: ${{ secrets.CSC_LINK }}
 
       - name: Build Electron App for ${{ matrix.platform }}
-        run: npx electron-builder --${{ matrix.platform }}
+        run: bunx electron-builder --config electron-builder.yml --${{ matrix.platform }}
         env:
           CSC_LINK: ${{ runner.workspace }}/cert.p12  # pointing to the local file
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}

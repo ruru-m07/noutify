@@ -47,5 +47,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-// @ts-expect-error - // ? well some type issue bcuz we are in canary channel.
 export default withBundleAnalyzer(nextConfig);

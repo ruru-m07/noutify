@@ -46,6 +46,9 @@ jobs:
       #   env:
       #     CSC_LINK: ${{ secrets.CSC_LINK }}
 
+      - name: Clean previous build artifacts
+        run: rm -rf apps/desktop/dist
+
       - name: Build Electron App for ${{ matrix.platform }}
         run: pwd && ls && cd ./apps/desktop && bunx electron-builder --config electron-builder.yml -l
         # env:

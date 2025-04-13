@@ -47,7 +47,7 @@ jobs:
       #     CSC_LINK: ${{ secrets.CSC_LINK }}
 
       - name: Build Electron App for ${{ matrix.platform }}
-        run: pwd && ls && bunx electron-builder --config electron-builder.yml -l
+        run: pwd && ls && cd ./apps/desktop && bunx electron-builder --config electron-builder.yml -l
         # env:
         #   CSC_LINK: ${{ runner.workspace }}/cert.p12  # pointing to the local file
         #   CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}

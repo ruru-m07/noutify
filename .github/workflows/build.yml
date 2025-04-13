@@ -51,6 +51,9 @@ jobs:
 
       - name: Install Dependencies
         run: bun install
+
+      - name: fuck
+        run: set env PUBLISH_FOR_PULL_REQUEST=false
         
       - name: Build Electron App for ${{ matrix.platform }}
         run: pwd && ls && cd ./apps/desktop && bunx electron-builder --config electron-builder.yml --linux deb tar.xz

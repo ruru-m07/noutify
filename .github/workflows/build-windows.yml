@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        arch: [x64, arm64]
 
     steps:
       - name: Checkout repository
@@ -30,14 +33,41 @@ jobs:
       - name: Run build
         run: bun run build --filter desktop
 
+      - name: Extract metadata
+        id: meta
+        shell: bash
+        run: |
+          echo "app_name=$(jq -r .name apps/desktop/package.json)" >> $GITHUB_OUTPUT
+          echo "app_version=$(jq -r .version apps/desktop/package.json)" >> $GITHUB_OUTPUT
+
       - name: Build Electron
         run: |
           cd apps/desktop/
           $env:USE_HARD_LINKS = "false"
-          bunx electron-builder --win
+          bunx electron-builder --win --${{ matrix.arch }}
 
-      - name: Upload Build Artifacts
+      - name: Upload dist folder
         uses: actions/upload-artifact@v4
         with:
-          name: build-windows
-          path: apps/desktop/dist
+          name: build-windows-${{ matrix.arch }}-dist
+          path: apps/desktop/dist/
+
+      - name: Upload unpacked folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-windows-${{ matrix.arch }}-unpacked
+          path: apps/desktop/dist/win-${{ matrix.arch }}-unpacked/
+
+      - name: Upload installer .exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-windows-${{ matrix.arch }}-installer
+          path: |
+            apps/desktop/dist/${{ steps.meta.outputs.app_name }} Setup ${{ steps.meta.outputs.app_version }}.exe
+
+      - name: Upload blockmap
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-windows-${{ matrix.arch }}-blockmap
+          path: |
+            apps/desktop/dist/${{ steps.meta.outputs.app_name }} Setup ${{ steps.meta.outputs.app_version }}.exe.blockmap

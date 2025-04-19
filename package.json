@@ -8,7 +8,9 @@
     "start": "dotenv -- turbo start",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:migrate": "dotenv -- turbo db:migrate",
-    "db:deploy": "dotenv -- turbo db:deploy"
+    "db:deploy": "dotenv -- turbo db:deploy",
+    "clean": "bash ./clean.sh",
+    "postinstall": "dotenv -- bunx turbo db:generate"
   },
   "devDependencies": {
     "@noutify/eslint": "*",

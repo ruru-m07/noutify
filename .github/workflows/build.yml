@@ -34,9 +34,6 @@ jobs:
       - name: Setup electron
         run: node ./node_modules/electron/install.js
 
-      - name: generate prisma
-        run: bunx turbo db:generate
-
       - name: Run build
         run: bun run build --filter desktop
 

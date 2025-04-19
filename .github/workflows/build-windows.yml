@@ -25,14 +25,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          $env:PRISMA_CLI_QUERY_ENGINE_TYPE="binary"
           bun install
-
-      - name: Setup Electron
-        run: node ./node_modules/electron/install.js
-
-      - name: Clean build artifacts
-        run: rm -rf apps/desktop/dist
 
       - name: Run build
         run: bun run build --filter desktop
@@ -42,7 +35,7 @@ jobs:
           cd apps/desktop/
           $env:USE_HARD_LINKS = "false"
           bunx electron-builder --win
-          
+
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:

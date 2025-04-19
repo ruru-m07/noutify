@@ -63,10 +63,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-linux-${{ matrix.arch }}-unpacked
-          path: apps/desktop/dist/linux-${{ matrix.arch }}-unpacked
+          path: |
+            apps/desktop/dist/linux${{ matrix.arch == 'x64' && '' || format('-{0}', matrix.arch) }}-unpacked
 
       - name: Upload .tar.gz
         uses: actions/upload-artifact@v4
         with:
           name: build-linux-${{ matrix.arch }}-tar
-          path: apps/desktop/dist/${{ steps.meta.outputs.app_name }}-${{ steps.meta.outputs.app_version }}${{ matrix.arch == 'x64' && '' || format('-{0}', matrix.arch) }}.tar.gz
+          path: |
+            apps/desktop/dist/${{ steps.meta.outputs.app_name }}-${{ steps.meta.outputs.app_version }}${{ matrix.arch == 'x64' && '' || format('-{0}', matrix.arch) }}.tar.gz

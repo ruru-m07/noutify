@@ -10,7 +10,7 @@
     "db:migrate": "dotenv -- turbo db:migrate",
     "db:deploy": "dotenv -- turbo db:deploy",
     "clean": "bash ./clean.sh",
-    "postinstall": "dotenv -- bunx turbo db:generate"
+    "postinstall": "dotenv -- rm -rf node_modules/.prisma && bunx turbo db:generate"
   },
   "devDependencies": {
     "@noutify/eslint": "*",

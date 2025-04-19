@@ -9,42 +9,45 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [x64, arm64, armv7l]
 
     outputs:
       app_name: ${{ steps.meta.outputs.app_name }}
       app_version: ${{ steps.meta.outputs.app_version }}
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4.3.0
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: 22
 
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
-      - name: Install Dependencies
-        run: |
-          export PRISMA_CLI_QUERY_ENGINE_TYPE=binary
-          bun install
+      - name: Cache Electron
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/electron
+            ~/.cache/electron-builder
+          key: ${{ runner.os }}-electron-${{ matrix.arch }}
 
-      - name: Setup Electron
-        run: node ./node_modules/electron/install.js
+      - name: Install dependencies
+        run: bun install
 
-      - name: Clean build artifacts
-        run: rm -rf apps/desktop/dist
-
-      - name: Run build
+      - name: Build app
         run: bun run build --filter desktop
 
-      - name: Build Electron
+      - name: Build Electron (${{ matrix.arch }})
         run: |
-          cd apps/desktop/
-          USE_HARD_LINKS=false bunx electron-builder
+          cd apps/desktop
+          USE_HARD_LINKS=false bunx electron-builder --linux --${{ matrix.arch }}
 
       - name: Extract metadata from package.json
         id: meta

@@ -1,0 +1,1 @@
+export * from "@noutify/ui/tailwind.config";

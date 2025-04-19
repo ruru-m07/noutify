@@ -1,0 +1,1 @@
+export { default } from "@noutify/ui/postcss.config";

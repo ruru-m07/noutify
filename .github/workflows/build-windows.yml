@@ -37,7 +37,7 @@ jobs:
         id: meta
         shell: bash
         run: |
-          echo "app_name=$(jq -r .name apps/desktop/package.json)" >> $GITHUB_OUTPUT
+          echo "app_name=noutify" >> $GITHUB_OUTPUT
           echo "app_version=$(jq -r .version apps/desktop/package.json)" >> $GITHUB_OUTPUT
 
       - name: Build Electron
@@ -56,18 +56,16 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-windows-${{ matrix.arch }}-unpacked
-          path: apps/desktop/dist/win-${{ matrix.arch }}-unpacked/
+          path: apps/desktop/dist/${{ matrix.arch == 'x64' && 'win-unpacked/' || 'win-arm64-unpacked/' }}
 
       - name: Upload installer .exe
         uses: actions/upload-artifact@v4
         with:
           name: build-windows-${{ matrix.arch }}-installer
-          path: |
-            apps/desktop/dist/${{ steps.meta.outputs.app_name }} Setup ${{ steps.meta.outputs.app_version }}.exe
+          path: apps/desktop/dist/${{ steps.meta.outputs.app_name }} Setup ${{ steps.meta.outputs.app_version }}.exe
 
       - name: Upload blockmap
         uses: actions/upload-artifact@v4
         with:
           name: build-windows-${{ matrix.arch }}-blockmap
-          path: |
-            apps/desktop/dist/${{ steps.meta.outputs.app_name }} Setup ${{ steps.meta.outputs.app_version }}.exe.blockmap
+          path: apps/desktop/dist/${{ steps.meta.outputs.app_name }} Setup ${{ steps.meta.outputs.app_version }}.exe.blockmap

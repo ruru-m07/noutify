@@ -10,6 +10,7 @@ const envSchema = z.object({
   OAUTH_GITHUB_SECRET: z.string().min(1, "OAUTH_GITHUB_SECRET is required"),
   AUTH_SECRET: z.string().min(1, "AUTH_SECRET is required"),
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
+  NEXT_PUBLIC_BASE_URL: z.string().url().default("http://localhost:3000"),
 });
 
 /** // ? Export the inferred TypeScript type for consumers */
@@ -29,6 +30,7 @@ function validateEnv(): EnvVariables {
       OAUTH_GITHUB_SECRET: "",
       AUTH_SECRET: "",
       DATABASE_URL: "",
+      NEXT_PUBLIC_BASE_URL: "http://localhost:3000",
     };
     // throw new Error("Environment validation error");
   }

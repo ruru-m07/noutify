@@ -1,16 +1,5 @@
 import NextAuth from "next-auth";
-import GitHub from "next-auth/providers/github";
-import { env } from "@noutify/env";
-import { PrismaClient } from "@prisma/client";
-import { PrismaNeon } from "@prisma/adapter-neon";
-import { Pool } from "@neondatabase/serverless";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-
-const neon = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-const adapter = new PrismaNeon(neon);
-const prisma = new PrismaClient({ adapter });
+import Credentials from "next-auth/providers/credentials";
 
 export const {
   handlers,
@@ -20,50 +9,85 @@ export const {
   unstable_update: update,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: any = NextAuth({
-  // @ts-expect-error - PrismaAdapter is not in the types
-  adapter: PrismaAdapter(prisma),
   providers: [
-    GitHub({
-      clientId: env.OAUTH_GITHUB_ID,
-      clientSecret: env.OAUTH_GITHUB_SECRET,
+    Credentials({
+      credentials: {
+        code: {},
+        deviceId: {},
+      },
+      authorize: async (credentials) => {
+        const response = await fetch(
+          "http://localhost:3001/api/auth/verify-code",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              deviceId: credentials.deviceId,
+              code: credentials.code,
+            }),
+          }
+        );
+
+        const jsonResponse: {
+          success: boolean;
+          error?: string;
+          data?: {
+            session: string;
+          };
+        } = await response.json();
+
+        if (jsonResponse.error) {
+          return null;
+        }
+        if (!jsonResponse.success) {
+          return null;
+        }
+
+        const parsedData: {
+          user: {
+            name: string;
+            email: string;
+            image: string;
+            profile: Profile;
+            accessToken: string;
+          };
+        } = JSON.parse(jsonResponse?.data?.session || "{}");
+        const newSession = {
+          name: parsedData.user.name,
+          email: parsedData.user.email,
+          image: parsedData.user.image,
+          profile: {
+            login: parsedData.user.profile.login,
+            id: parsedData.user.profile.id,
+            avatar_url: parsedData.user.profile.avatar_url,
+            url: parsedData.user.profile.url,
+            type: parsedData.user.profile.type,
+            name: parsedData.user.profile.name,
+            email: parsedData.user.profile.email,
+          },
+          accessToken: parsedData.user.accessToken,
+        };
+
+        return newSession;
+      },
     }),
   ],
   session: {
     strategy: "jwt",
   },
   callbacks: {
-    jwt({ token, trigger, session, user, profile }) {
-      if (trigger === "update" && session) {
-        token.accessToken = session.user.accessToken;
-        console.log({
-          hmm: session.user.accessToken,
-        });
-      }
+    async jwt({ token, user }) {
       if (user) {
-        token.profile = profile;
+        token.profile = user.profile;
+        token.accessToken = user.accessToken;
       }
       return token;
     },
     async session({ session, token }) {
-      const profile = token.profile as Profile;
-
-      if (session && profile) {
-        if (!session.user.profile) {
-          session.user.profile = {} as Profile;
-        }
-
-        if (token.accessToken) {
-          session.user.accessToken = token.accessToken as string;
-        }
-
-        session.user.profile.login = profile.login;
-        session.user.profile.id = profile.id;
-        session.user.profile.avatar_url = profile.avatar_url;
-        session.user.profile.url = profile.url;
-        session.user.profile.type = profile.type;
-        session.user.profile.name = profile.name;
-        session.user.profile.email = profile.email;
-      }
+      session.user.profile = token.profile as Profile;
+      session.user.accessToken = token.accessToken as string;
 
       return session;
     },

@@ -1,20 +1,13 @@
 import React from "react";
-import { redirect } from "next/navigation";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { ArrowRight, X } from "lucide-react";
 
 import { Button } from "@noutify/ui/components/button";
 
-import { auth, signIn } from "@/auth";
 import Logo from "@/components/customs/logo";
+import { signIn } from "@/auth";
 
-export default async function LoginPage() {
-  const session = await auth();
-  
-  if (session) {
-    redirect("/");
-  }
-
+export default function LoginPage() {
   return (
     <>
       <form

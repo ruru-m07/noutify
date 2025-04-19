@@ -8,7 +8,12 @@ export default async function middleware(req: NextRequest) {
   const isAuthenticated = !!session;
 
   // Define public routes
-  const publicRoutes = ["/", "/auth/login", "/auth/token"];
+  const publicRoutes = [
+    "/",
+    "/auth/login",
+    "/auth/token",
+    "/api/auth/verify-code",
+  ];
 
   // Allow access to public routes
   if (publicRoutes.includes(pathname)) {
@@ -52,5 +57,5 @@ export default async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-  runtime: 'nodejs',
+  runtime: "nodejs",
 };

@@ -8,7 +8,7 @@ export default async function middleware(req: NextRequest) {
   const isAuthenticated = !!session;
 
   // Define public routes
-  const publicRoutes = ["/", "/auth/login", "/auth/token"];
+  const publicRoutes = ["/", "/auth/login", "/auth/token", "/auth/verify-code"];
 
   // Allow access to public routes
   if (publicRoutes.includes(pathname)) {

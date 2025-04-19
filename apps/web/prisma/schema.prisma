@@ -50,3 +50,13 @@ model VerificationToken {
 
   @@id([identifier, token])
 }
+
+model TokenMap {
+  id          String   @id @default(cuid())
+  deviceId    String
+  code        String
+  expiresAt   DateTime
+  session     String
+
+  @@map("tokenMap")
+}

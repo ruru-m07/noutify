@@ -5,7 +5,6 @@ import React from "react";
 import { TooltipProvider } from "@noutify/ui/components/tooltip";
 
 import { ThemeProvider } from "./theme";
-import { AppStateProvider } from "./appState";
 import { SessionProvider } from "next-auth/react";
 
 const ContextProvider = React.forwardRef<
@@ -23,11 +22,9 @@ const ContextProvider = React.forwardRef<
         refetchInterval={30000}
         session={session}
       >
-        <AppStateProvider>
-          <ThemeProvider>
-            <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
-          </ThemeProvider>
-        </AppStateProvider>
+        <ThemeProvider>
+          <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
+        </ThemeProvider>
       </SessionProvider>
     </div>
   );

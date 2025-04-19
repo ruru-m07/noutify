@@ -1,5 +1,5 @@
 import { is } from "@electron-toolkit/utils";
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, shell } from "electron";
 import { getPort } from "get-port-please";
 import { join } from "path";
 import { spawn } from "child_process";
@@ -17,13 +17,28 @@ const createWindow = (): BrowserWindow => {
     height: 870,
     webPreferences: {
       preload: join(__dirname, "preload.js"),
-      nodeIntegration: false,
       contextIsolation: true,
+      nodeIntegration: false,
       devTools: is.dev,
     },
   });
 
   mainWindow.setMenuBarVisibility(false);
+
+  // mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+  //   shell.openExternal(url);
+  //   return { action: "deny" };
+  // });
+
+  // mainWindow.webContents.on("will-navigate", (event, url) => {
+  //   const currentURL = mainWindow.webContents.getURL();
+  //   const isExternal = new URL(url).origin !== new URL(currentURL).origin;
+
+  //   if (isExternal) {
+  //     event.preventDefault();
+  //     shell.openExternal(url);
+  //   }
+  // });
 
   // ? Enable key shortcuts for zooming in/out/resetting zoom.
   mainWindow.webContents.on("before-input-event", (event, input) => {
@@ -144,6 +159,10 @@ process.on("SIGINT", () => {
     serverProcess.kill("SIGTERM");
   }
   app.quit();
+});
+
+ipcMain.handle("open-external", async (_event, url: string) => {
+  await shell.openExternal(url);
 });
 
 app.disableHardwareAcceleration();

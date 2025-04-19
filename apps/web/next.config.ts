@@ -8,8 +8,6 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@noutify/ui"],
-  // TODO(ruru-m07): Implement standalone output configuration for desctop builds.
-  output: "standalone",
   experimental: {
     serverActions: {
       bodySizeLimit: "2mb",
@@ -43,11 +41,10 @@ const nextConfig: NextConfig = {
     ],
   },
   // outputFileTracingRoot: path.join(__dirname, '../../'),
-  outputFileTracingRoot: path.join(__dirname, './'),
+  outputFileTracingRoot: path.join(__dirname, "./"),
   outputFileTracingIncludes: {
     "*": ["public/**/*", ".next/static/**/*"],
   },
 };
 
-// @ts-expect-error - // ? well some type issue bcuz we are in canary channel.
 export default withBundleAnalyzer(nextConfig);

@@ -6,17 +6,17 @@ import TokenCard from "./tokenCard";
 export default async function TokenPage() {
   const session = await auth();
 
-  if (!session) {
-    redirect("/auth/login");
-  }
+  // if (!session) {
+  //   redirect("/auth/login");
+  // }
 
-  if (session && session.user.accessToken) {
-    redirect("/");
-  }
+  // if (session && session.user.accessToken) {
+  //   redirect("/");
+  // }
 
   return (
     <>
-      <TokenCard session={session} />
+      {/* <TokenCard session={session} /> */}
     </>
   );
 }

@@ -20,7 +20,8 @@ mac:
   target:
     - target: zip
       arch:
-        - universal
+        - x64
+        - arm64
 
 # --- Windows configuration: Three artifacts (User Installer, System Installer, and .zip) for x64 and Arm64 ---
 # win:

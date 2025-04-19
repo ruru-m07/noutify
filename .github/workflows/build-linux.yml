@@ -39,6 +39,9 @@ jobs:
           export PRISMA_CLI_QUERY_ENGINE_TYPE=binary
           bun install
 
+      - name: Install snapcraft
+        run: sudo snap install snapcraft --classic 
+
       - name: Build app
         run: bun run build --filter desktop
 

@@ -29,7 +29,9 @@ jobs:
           bun-version: latest
 
       - name: Install Dependencies
-        run: bun install
+        run: |
+          export PRISMA_CLI_QUERY_ENGINE_TYPE=binary
+          bun install
 
       - name: Setup electron
         run: node ./node_modules/electron/install.js

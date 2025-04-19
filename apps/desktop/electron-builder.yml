@@ -15,14 +15,14 @@ files:
   - .next/standalone/**/node_modules/**
 
 # --- mac configuration: Build a zip for Intel, Apple Silicon, and Universal ---
-# mac:
-#   category: public.app-category.developer-tools
-#   target:
-#     - target: zip
-#       arch:
-#         - x64
-#         - arm64
-#         - universal
+mac:
+  category: public.app-category.developer-tools
+  target:
+    - target: zip
+      arch:
+        - x64
+        - arm64
+        - universal
 
 # --- Windows configuration: Three artifacts (User Installer, System Installer, and .zip) for x64 and Arm64 ---
 # win:

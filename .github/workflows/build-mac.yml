@@ -47,5 +47,5 @@ jobs:
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: build-linux
+          name: build-mac
           path: apps/desktop/dist

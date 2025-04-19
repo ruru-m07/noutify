@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    outputs:
+      app_name: ${{ steps.meta.outputs.app_name }}
+      app_version: ${{ steps.meta.outputs.app_version }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -42,8 +46,37 @@ jobs:
           cd apps/desktop/
           USE_HARD_LINKS=false bunx electron-builder
 
-      - name: Upload Build Artifacts
+      - name: Extract metadata from package.json
+        id: meta
+        run: |
+          echo "app_name=$(jq -r .name apps/desktop/package.json)" >> $GITHUB_OUTPUT
+          echo "app_version=$(jq -r .version apps/desktop/package.json)" >> $GITHUB_OUTPUT
+
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - name: full-dist
+            path: apps/desktop/dist
+          - name: linux-unpacked
+            path: apps/desktop/dist/linux-unpacked
+          - name: linux-tar
+            path: apps/desktop/dist/${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.app_version }}.tar.gz
+          - name: linux-armv7l-unpacked
+            path: apps/desktop/dist/linux-armv7l-unpacked
+          - name: linux-armv7l-tar
+            path: apps/desktop/dist/${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.app_version }}-armv7l.tar.gz
+          - name: linux-arm64-unpacked
+            path: apps/desktop/dist/linux-arm64-unpacked
+          - name: linux-arm64-tar
+            path: apps/desktop/dist/${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.app_version }}-arm64.tar.gz
+
+    steps:
+      - name: Upload ${{ matrix.name }}
         uses: actions/upload-artifact@v4
         with:
-          name: build-linux
-          path: apps/desktop/dist
+          name: build-linux-${{ matrix.name }}
+          path: ${{ matrix.path }}

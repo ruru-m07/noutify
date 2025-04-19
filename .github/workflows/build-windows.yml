@@ -24,7 +24,9 @@ jobs:
           bun-version: latest
 
       - name: Install Dependencies
-        run: PRISMA_CLI_QUERY_ENGINE_TYPE=binary bun install
+        run: |
+          $env:PRISMA_CLI_QUERY_ENGINE_TYPE="binary"
+          bun install
 
       - name: Setup Electron
         run: node ./node_modules/electron/install.js
@@ -38,10 +40,11 @@ jobs:
       - name: Build Electron
         run: |
           cd apps/desktop/
-          USE_HARD_LINKS=false bunx electron-builder --win
-
+          $env:USE_HARD_LINKS = "false"
+          bunx electron-builder --win
+          
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: build-linux
+          name: build-windows
           path: apps/desktop/dist

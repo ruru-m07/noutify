@@ -7,15 +7,11 @@ on:
     branches: ["*"]
 
 jobs:
-  build:
+  build-and-upload:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         arch: [x64, arm64, armv7l]
-
-    outputs:
-      app_name: ${{ steps.meta.outputs.app_name }}
-      app_version: ${{ steps.meta.outputs.app_version }}
 
     steps:
       - name: Checkout
@@ -39,47 +35,38 @@ jobs:
           key: ${{ runner.os }}-electron-${{ matrix.arch }}
 
       - name: Install dependencies
-        run: bun install
+        run: |
+          export PRISMA_CLI_QUERY_ENGINE_TYPE=binary
+          bun install
 
       - name: Build app
         run: bun run build --filter desktop
 
-      - name: Build Electron (${{ matrix.arch }})
-        run: |
-          cd apps/desktop
-          USE_HARD_LINKS=false bunx electron-builder --linux --${{ matrix.arch }}
-
-      - name: Extract metadata from package.json
+      - name: Extract metadata
         id: meta
         run: |
           echo "app_name=$(jq -r .name apps/desktop/package.json)" >> $GITHUB_OUTPUT
           echo "app_version=$(jq -r .version apps/desktop/package.json)" >> $GITHUB_OUTPUT
 
-  upload:
-    needs: build
-    runs-on: ubuntu-latest
+      - name: Build Electron for ${{ matrix.arch }}
+        run: |
+          cd apps/desktop
+          USE_HARD_LINKS=false bunx electron-builder --linux --${{ matrix.arch }}
 
-    strategy:
-      matrix:
-        include:
-          - name: full-dist
-            path: apps/desktop/dist
-          - name: linux-unpacked
-            path: apps/desktop/dist/linux-unpacked
-          - name: linux-tar
-            path: apps/desktop/dist/${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.app_version }}.tar.gz
-          - name: linux-armv7l-unpacked
-            path: apps/desktop/dist/linux-armv7l-unpacked
-          - name: linux-armv7l-tar
-            path: apps/desktop/dist/${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.app_version }}-armv7l.tar.gz
-          - name: linux-arm64-unpacked
-            path: apps/desktop/dist/linux-arm64-unpacked
-          - name: linux-arm64-tar
-            path: apps/desktop/dist/${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.app_version }}-arm64.tar.gz
-
-    steps:
-      - name: Upload ${{ matrix.name }}
+      - name: Upload dist folder
         uses: actions/upload-artifact@v4
         with:
-          name: build-linux-${{ matrix.name }}
-          path: ${{ matrix.path }}
+          name: build-linux-${{ matrix.arch }}-dist
+          path: apps/desktop/dist/
+
+      - name: Upload unpacked folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-linux-${{ matrix.arch }}-unpacked
+          path: apps/desktop/dist/linux-${{ matrix.arch }}-unpacked
+
+      - name: Upload .tar.gz
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-linux-${{ matrix.arch }}-tar
+          path: apps/desktop/dist/${{ steps.meta.outputs.app_name }}-${{ steps.meta.outputs.app_version }}${{ matrix.arch == 'x64' && '' || format('-{0}', matrix.arch) }}.tar.gz

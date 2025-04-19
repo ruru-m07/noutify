@@ -25,7 +25,6 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          export PRISMA_CLI_QUERY_ENGINE_TYPE=binary
           bun install
 
       - name: Setup Electron

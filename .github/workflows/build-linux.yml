@@ -36,7 +36,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          export PRISMA_CLI_QUERY_ENGINE_TYPE=binary
           bun install
 
       - name: Build app

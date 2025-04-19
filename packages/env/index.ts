@@ -25,14 +25,7 @@ function validateEnv(): EnvVariables {
   const result = envSchema.safeParse(process.env);
   if (!result.success) {
     console.error("Invalid environment variables:", result.error.format());
-    return {
-      OAUTH_GITHUB_ID: "",
-      OAUTH_GITHUB_SECRET: "",
-      AUTH_SECRET: "",
-      DATABASE_URL: "",
-      NEXT_PUBLIC_BASE_URL: "http://localhost:3000",
-    };
-    // throw new Error("Environment validation error");
+    throw new Error("Environment validation error");
   }
   return result.data;
 }

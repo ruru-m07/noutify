@@ -19,7 +19,6 @@
         "@auth/prisma-adapter": "^1.5.2",
         "@electron-toolkit/utils": "^4.0.0",
         "@next/bundle-analyzer": "^15.2.4",
-        "@noutify/env": "*",
         "@noutify/functions": "*",
         "@noutify/ui": "*",
         "@prisma/adapter-neon": "5.12.0",

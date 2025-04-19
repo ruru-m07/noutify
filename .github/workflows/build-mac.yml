@@ -42,7 +42,7 @@ jobs:
           cd apps/desktop/
           export USE_HARD_LINKS=false 
           export CSC_IDENTITY_AUTO_DISCOVERY=false
-          bunx electron-builder --mac --universal
+          bunx electron-builder --mac
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4

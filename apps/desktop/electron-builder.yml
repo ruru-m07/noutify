@@ -3,7 +3,7 @@ productName: noutify
 
 directories:
   output: dist
-  buildResources: assets
+  buildResources: icons
 
 asar: false
 
@@ -17,6 +17,7 @@ files:
 # --- mac configuration: Build a zip for Intel, Apple Silicon, and Universal ---
 mac:
   category: public.app-category.developer-tools
+  icon: icons/mac/icon.icns
   target:
     - target: zip
       arch:
@@ -25,6 +26,7 @@ mac:
 
 # --- Windows configuration: Three artifacts (User Installer, System Installer, and .zip) for x64 and Arm64 ---
 win:
+  icon: icons/win/icon.ico
   target:
     # - target: nsis
     #   arch:
@@ -47,6 +49,7 @@ win:
 # --- Linux configuration: Four artifacts (Deb, RPM, Tar.gz, and Snap) for x64, Armv7l, and Arm64 ---
 # Note: The Snap target is not available for Armv7l, so it is excluded from that architecture.
 linux:
+  icon: icons/linux
   target:
     # - target: deb
     #   arch:

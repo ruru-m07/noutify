@@ -42,4 +42,4 @@ jobs:
         run: bun run build --filter desktop
 
       - name: build electron
-        run: cd apps/desktop/ && bunx electron-builder
+        run: cd apps/desktop/ && USE_HARD_LINKS=false bunx electron-builder

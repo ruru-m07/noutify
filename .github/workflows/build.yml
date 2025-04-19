@@ -11,14 +11,16 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        arch: [x64, arm64]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Use Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4.3.0
         with:
           node-version: "22"
@@ -32,7 +34,7 @@ jobs:
           export PRISMA_CLI_QUERY_ENGINE_TYPE=binary
           bun install
 
-      - name: Setup electron
+      - name: Setup Electron
         run: node ./node_modules/electron/install.js
 
       - name: Clean build artifacts
@@ -41,5 +43,13 @@ jobs:
       - name: Run build
         run: bun run build --filter desktop
 
-      - name: build electron
-        run: cd apps/desktop/ && USE_HARD_LINKS=false bunx electron-builder
+      - name: Build Electron
+        run: |
+          cd apps/desktop/
+          USE_HARD_LINKS=false bunx electron-builder --${{ matrix.os }} --${{ matrix.arch }}
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-${{ matrix.os }}-${{ matrix.arch }}
+          path: apps/desktop/dist

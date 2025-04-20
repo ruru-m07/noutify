@@ -1,0 +1,73 @@
+name: build-linux
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [x64, arm64, armv7l]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Cache Electron
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/electron
+            ~/.cache/electron-builder
+          key: ${{ runner.os }}-electron-${{ matrix.arch }}
+
+      - name: Install dependencies
+        run: |
+          bun install
+
+      - name: Build app
+        run: bun run build --filter desktop
+
+      - name: Extract metadata
+        id: meta
+        run: |
+          echo "app_name=$(jq -r .name apps/desktop/package.json)" >> $GITHUB_OUTPUT
+          echo "app_version=$(jq -r .version apps/desktop/package.json)" >> $GITHUB_OUTPUT
+
+      - name: Build Electron for ${{ matrix.arch }}
+        run: |
+          cd apps/desktop
+          USE_HARD_LINKS=false bunx electron-builder --linux --${{ matrix.arch }}
+
+      - name: Upload dist folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-linux-${{ matrix.arch }}-dist
+          path: apps/desktop/dist/
+
+      - name: Upload unpacked folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-linux-${{ matrix.arch }}-unpacked
+          path: |
+            apps/desktop/dist/${{ matrix.arch == 'x64' && 'linux-unpacked' || format('linux-{0}-unpacked', matrix.arch) }}
+
+      - name: Upload .tar.gz
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-linux-${{ matrix.arch }}-tar
+          path: |
+            apps/desktop/dist/${{ matrix.arch == 'x64' && format('{0}-{1}.tar.gz', steps.meta.outputs.app_name, steps.meta.outputs.app_version) || format('{0}-{1}-{2}.tar.gz', steps.meta.outputs.app_name, steps.meta.outputs.app_version, matrix.arch) }}

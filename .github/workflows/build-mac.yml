@@ -1,0 +1,80 @@
+name: build-mac
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4.3.0
+        with:
+          node-version: "22"
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: |
+          bun install
+
+      - name: Setup Electron
+        run: node ./node_modules/electron/install.js
+
+      - name: Clean build artifacts
+        run: rm -rf apps/desktop/dist
+
+      - name: Run build
+        run: bun run build --filter desktop
+
+      - name: Extract metadata
+        id: meta
+        run: |
+          echo "app_name=noutify" >> $GITHUB_OUTPUT
+          echo "app_version=$(jq -r .version apps/desktop/package.json)" >> $GITHUB_OUTPUT
+
+      - name: Build Electron
+        run: |
+          cd apps/desktop/
+          export USE_HARD_LINKS=false 
+          export CSC_IDENTITY_AUTO_DISCOVERY=false
+          bunx electron-builder --mac --x64 --arm64
+
+      - name: Upload dist folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-mac-dist
+          path: apps/desktop/dist/
+
+      - name: Upload unpacked folders
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-mac-unpacked
+          path: |
+            apps/desktop/dist/mac
+            apps/desktop/dist/mac-arm64
+
+      - name: Upload installer .zip files
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-mac-zip
+          path: |
+            apps/desktop/dist/${{ steps.meta.outputs.app_name }}-${{ steps.meta.outputs.app_version }}-mac.zip
+            apps/desktop/dist/${{ steps.meta.outputs.app_name }}-${{ steps.meta.outputs.app_version }}-arm64-mac.zip
+
+      - name: Upload blockmaps
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-mac-blockmap
+          path: |
+            apps/desktop/dist/${{ steps.meta.outputs.app_name }}-${{ steps.meta.outputs.app_version }}-mac.zip.blockmap
+            apps/desktop/dist/${{ steps.meta.outputs.app_name }}-${{ steps.meta.outputs.app_version }}-arm64-mac.zip.blockmap

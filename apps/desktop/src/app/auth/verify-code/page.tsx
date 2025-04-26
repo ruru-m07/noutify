@@ -14,12 +14,14 @@ import { toast, Toaster } from "sonner";
 import { CircleCheckIcon, LoaderCircleIcon, XIcon } from "lucide-react";
 import { createSession } from "@/actions/createSession";
 import { useRouter } from "next/navigation";
+import { getUpStreamURL } from "@/actions/getUpStream";
 
 export default function LoginPage() {
   const [deviceId, setDeviceId] = React.useState<string | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [otp, setOtp] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
+  const [streamURL, setStreamURL] = React.useState<string | null>(null);
 
   const router = useRouter();
 
@@ -36,6 +38,10 @@ export default function LoginPage() {
         console.error("Error fetching device ID:", error);
       }
     })();
+    (async () => {
+      const streamURL = await getUpStreamURL();
+      setStreamURL(streamURL);
+    })();
   }, []);
 
   const handelOnSubmit = async (otp: string) => {
@@ -48,19 +54,16 @@ export default function LoginPage() {
         return;
       }
 
-      const response = await fetch(
-        "http://localhost:3001/api/auth/verify-code",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            deviceId: deviceId,
-            code: otp,
-          }),
-        }
-      );
+      const response = await fetch(`${streamURL}/api/auth/verify-code`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          deviceId: deviceId,
+          code: otp,
+        }),
+      });
 
       const jsonResponse: {
         success: boolean;
@@ -162,7 +165,7 @@ export default function LoginPage() {
               <span
                 onClick={() => {
                   window.navigator.clipboard.writeText(
-                    `http://localhost:3001/auth/device?deviceId=${deviceId}`
+                    `${streamURL}/auth/device?deviceId=${deviceId}`
                   );
                   toast.custom((t) => (
                     <div className="bg-background text-foreground w-full rounded-md border px-4 py-3 shadow-lg sm:w-[var(--width)]">

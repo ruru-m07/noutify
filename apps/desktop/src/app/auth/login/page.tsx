@@ -48,7 +48,7 @@ export default function LoginPage() {
             className="w-full group"
             type="submit"
             onClick={() => {
-              window.open(
+              window.electron.openExternal(
                 `http://localhost:3001/auth/device?deviceId=${deviceId}`
               );
               router.push("/auth/verify-code");

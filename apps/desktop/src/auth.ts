@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { getUpStreamURL } from "./actions/getUpStream";
 
 export const {
   handlers,
@@ -16,19 +17,17 @@ export const {
         deviceId: {},
       },
       authorize: async (credentials) => {
-        const response = await fetch(
-          "http://localhost:3001/api/auth/verify-code",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              deviceId: credentials.deviceId,
-              code: credentials.code,
-            }),
-          }
-        );
+        const streamURL = await getUpStreamURL();
+        const response = await fetch(`${streamURL}/api/auth/verify-code`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            deviceId: credentials.deviceId,
+            code: credentials.code,
+          }),
+        });
 
         const jsonResponse: {
           success: boolean;

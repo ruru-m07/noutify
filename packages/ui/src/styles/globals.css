@@ -60,3 +60,10 @@
 summary {
   @apply cursor-pointer;
 }
+
+.smooth-blur {
+  @apply backdrop-blur-[5px] pointer-events-none fixed;
+  -webkit-mask-image: linear-gradient(to top, #000 25%, transparent);
+  mask-image: linear-gradient(to top, #000 25%, transparent);
+  -webkit-backdrop-filter: blur(5px);
+}

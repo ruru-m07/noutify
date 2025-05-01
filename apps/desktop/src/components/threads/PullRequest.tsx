@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { Notification } from "@/context/appState";
+import type { Notification } from "@/types";
 import { H4, Muted } from "../typography";
 import {
   ArrowRight,
@@ -137,8 +137,12 @@ const PullRequestThread = ({ notification }: ThreadProps) => {
               </TabsTrigger>
             </div>
             <div className="flex gap-2 font-medium text-sm">
-              <span className="text-green-500">+{notification.pullRequest?.additions}</span>
-              <span className="text-red-500">-{notification.pullRequest?.deletions}</span>
+              <span className="text-green-500">
+                +{notification.pullRequest?.additions}
+              </span>
+              <span className="text-red-500">
+                -{notification.pullRequest?.deletions}
+              </span>
             </div>
           </TabsList>
           <TabsContent value="conversation">

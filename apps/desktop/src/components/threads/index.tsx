@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { Notification } from "@/context/appState";
+import type { Notification } from "@/types";
 import NotificationIcon from "../customs/notificationIcon";
 import { Button } from "@noutify/ui/components/button";
 import Link from "next/link";

@@ -18,6 +18,7 @@ import { Button } from "@noutify/ui/components/button";
 import {
   BookMarked,
   CircleDot,
+  FolderGit2,
   GitPullRequestArrow,
   Inbox,
   Plus,
@@ -35,60 +36,7 @@ const Sidebar = async () => {
           <HoverCardTrigger>
             <Logo />
           </HoverCardTrigger>
-          <HoverCardContent side="left" className="w-[340px] mt-2">
-            <div className="flex items-start gap-3">
-              <Image
-                src={"/assets/logo_dark.svg"}
-                alt="catra logo"
-                width={40}
-                height={40}
-              />
-              <div className="space-y-1">
-                <p className="text-sm font-sans">
-                  By{" "}
-                  <Link
-                    target="_blank"
-                    href={"https://x.com/ruru_dev07"}
-                    className="font-extrabold underline"
-                  >
-                    @Ruru
-                  </Link>
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  This project is maintained by{" "}
-                  <span className="inline-block">
-                    <Link
-                      href="https://github.com/ruru-m07"
-                      target="_blank"
-                      className="text-primary underline"
-                    >
-                      Ruru {" 😽 "}
-                    </Link>
-                  </span>
-                  . It is free to use and{" "}
-                  <span className="inline-block">
-                    <Link
-                      href="https://github.com/ruru-m07/noutify"
-                      target="_blank"
-                      className="text-primary underline"
-                    >
-                      open source ( ⭐ )
-                    </Link>
-                  </span>
-                  . If you like our projects, please consider{" "}
-                  <span className="inline-block">
-                    <Link
-                      href="https://github.com/sponsors/ruru-m07"
-                      target="_blank"
-                      className="text-primary underline"
-                    >
-                      supporting us 💝 :3
-                    </Link>
-                  </span>
-                </p>
-              </div>
-            </div>
-          </HoverCardContent>
+          <CardContent />
         </HoverCard>
 
         <div className="flex flex-col items-center gap-1">
@@ -98,7 +46,7 @@ const Sidebar = async () => {
               {
                 icon: Inbox,
                 name: "Inbox",
-                href: "/",
+                href: "/inbox",
               },
               {
                 icon: GitPullRequestArrow,
@@ -109,6 +57,11 @@ const Sidebar = async () => {
                 icon: CircleDot,
                 name: "Issues",
                 href: "/issues",
+              },
+              {
+                icon: FolderGit2,
+                name: "Local Git",
+                href: "/git",
               },
             ]}
           />
@@ -160,7 +113,7 @@ const Sidebar = async () => {
                 icon: Settings,
                 href: "/settings",
                 name: "Settings",
-              }
+              },
             ]}
           />
         </div>
@@ -176,3 +129,62 @@ const Sidebar = async () => {
 };
 
 export default Sidebar;
+
+const CardContent = () => {
+  return (
+    <HoverCardContent side="left" className="w-[340px] mt-2">
+      <div className="flex items-start gap-3">
+        <Image
+          src={"/assets/logo_dark.svg"}
+          alt="catra logo"
+          width={40}
+          height={40}
+        />
+        <div className="space-y-1">
+          <p className="text-sm font-sans">
+            By{" "}
+            <Link
+              target="_blank"
+              href={"https://x.com/ruru_dev07"}
+              className="font-extrabold underline"
+            >
+              @Ruru
+            </Link>
+          </p>
+          <p className="text-sm text-muted-foreground">
+            This project is maintained by{" "}
+            <span className="inline-block">
+              <Link
+                href="https://github.com/ruru-m07"
+                target="_blank"
+                className="text-primary underline"
+              >
+                Ruru {" 😽 "}
+              </Link>
+            </span>
+            . It is free to use and{" "}
+            <span className="inline-block">
+              <Link
+                href="https://github.com/ruru-m07/noutify"
+                target="_blank"
+                className="text-primary underline"
+              >
+                open source ( ⭐ )
+              </Link>
+            </span>
+            . If you like our projects, please consider{" "}
+            <span className="inline-block">
+              <Link
+                href="https://github.com/sponsors/ruru-m07"
+                target="_blank"
+                className="text-primary underline"
+              >
+                supporting us 💝 :3
+              </Link>
+            </span>
+          </p>
+        </div>
+      </div>
+    </HoverCardContent>
+  );
+};

@@ -23,4 +23,16 @@ export class ActivityAPI {
       });
     return data;
   }
+
+  async getThread(
+    params: RestEndpointMethodTypes["activity"]["getThread"]["parameters"]
+  ): Promise<
+    RestEndpointMethodTypes["activity"]["getThread"]["response"]["data"]
+  > {
+    const { data } = await this.octokit.activity.getThread({
+      ...params,
+      headers: getGitHubHeaders(this.apiVersion),
+    });
+    return data;
+  }
 }

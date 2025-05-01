@@ -1,6 +1,6 @@
 "use server";
 
-import type { Notification } from "@/context/appState";
+import type { Notification } from "@/types";
 import { getGithubClient } from "@/lib/ghClient";
 
 export async function listNotifications({

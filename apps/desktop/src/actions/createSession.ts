@@ -1,17 +1,20 @@
 "use server";
 
-export async function createSession({
-  code,
-  deviceId,
-}: {
-  code: string;
-  deviceId: string;
-}) {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export async function createSession({ user }: { user: any }) {
   const { signIn } = await import("@/auth");
 
   await signIn("credentials", {
-    code: code,
-    deviceId: deviceId,
+    name: user.name,
+    email: user.email,
+    image: user.image,
+    plogin: user.profile.login,
+    pid: user.profile.id,
+    pavatar_url: user.profile.avatar_url,
+    purl: user.profile.url,
+    ptype: user.profile.type,
+    pname: user.profile.name,
+    pemail: user.profile.email,
     redirectTo: "/",
   });
 

@@ -7,14 +7,19 @@ import { Button } from "@noutify/ui/components/button";
 import Logo from "@/components/customs/logo";
 import { signIn } from "@/auth";
 
-export default function LoginPage() {
+export default function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   return (
     <>
       <form
         action={async () => {
           "use server";
+          const params = await searchParams;
           await signIn("github", {
-            redirectTo: "/",
+            redirectTo: params.callbackUrl,
           });
         }}
         className="flex flex-col items-center justify-center h-screen"

@@ -41,6 +41,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  turbopack: {
+    root: "../../",
+  },
   outputFileTracingRoot: path.join(__dirname, "./"),
   outputFileTracingIncludes: {
     "*": ["public/**/*", ".next/static/**/*"],

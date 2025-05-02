@@ -11,7 +11,7 @@
   },
   "main": "build/main.js",
   "scripts": {
-    "next:dev": "next dev",
+    "next:dev": "next dev --turbopack",
     "next:build": "next build",
     "next:start": "next start",
     "next:lint": "next lint",

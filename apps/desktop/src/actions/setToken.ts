@@ -34,8 +34,7 @@ export async function setTokenAction({ token }: { token: string }) {
   // ! Check session user is the same as the authenticated user
   if (session && session.user?.profile.login !== user.login) {
     return {
-      warning:
-        `Please Enter the correct token of the logged in user. Got ${session.user?.profile.login} but expected ${user.login}`,
+      warning: `Please Enter the correct token of the logged in user. Got ${session.user?.profile.login} but expected ${user.login}`,
     };
   }
 

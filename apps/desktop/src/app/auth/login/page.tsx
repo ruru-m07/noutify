@@ -8,29 +8,22 @@ import { Button } from "@noutify/ui/components/button";
 import { useRouter } from "next/navigation";
 import { Muted } from "@/components/typography";
 import { getUpStreamURL } from "@/actions/getUpStream";
+import { getServerPort } from "@/actions/getServerPort";
 
 export default function LoginPage() {
-  const [deviceId, setDeviceId] = React.useState<string | null>(null);
   const [streamURL, setStreamURL] = React.useState<string | null>(null);
+  const [port, setPort] = React.useState<string | null>(null);
 
   const router = useRouter();
 
   React.useEffect(() => {
     (async () => {
-      try {
-        const response = await fetch("/api/fingerprint");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.text();
-        setDeviceId(data);
-      } catch (error) {
-        console.error("Error fetching device ID:", error);
-      }
-    })();
-    (async () => {
       const streamURL = await getUpStreamURL();
       setStreamURL(streamURL);
+    })();
+    (async () => {
+      const { port } = await getServerPort();
+      setPort(port as string);
     })();
   }, []);
 
@@ -53,7 +46,7 @@ export default function LoginPage() {
             type="submit"
             onClick={() => {
               window.electron.openExternal(
-                `${streamURL}/auth/device?deviceId=${deviceId}`
+                `${streamURL}/auth/device?port=${port}`
               );
               router.push("/auth/verify-code");
             }}

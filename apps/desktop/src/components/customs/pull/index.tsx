@@ -124,7 +124,7 @@ export const PullRequest = ({
           </Link>
         </div>
       </div>
-      <ScrollArea className="h-[calc(100vh-var(--top-nav-height))]">
+      <ScrollArea className="relative h-[calc(100vh-var(--top-nav-height))]">
         <div className="[--sectionswidth:60rem] mx-auto p-4">
           <H4 className="w-[var(--sectionswidth)] mx-auto pt-10">
             {pullRequest.title}
@@ -246,7 +246,8 @@ export const PullRequest = ({
             </div>
           </div>
           <Tabs className="w-full" defaultValue="conversation">
-            <TabsList className="w-full sticky -top-1 z-10 bg-inherit backdrop-blur-3xl justify-between mb-3 h-auto gap-2 rounded-none px-0 pt-1 pb-0 text-foreground">
+            {/* <TabsList className="w-full sticky -top-1 z-10 bg-transparent justify-between mb-3 h-auto gap-2 rounded-none px-0 pt-1 pb-0 text-foreground"> */}
+            <TabsList className="w-full bg-transparent justify-between mb-3 h-auto gap-2 rounded-none px-0 pt-1 pb-0 text-foreground">
               <div className="w-[var(--sectionswidth)] mx-auto flex items-center justify-between border-b border-border pb-1">
                 <div className="flex gap-2 ">
                   <TabsTrigger
@@ -473,6 +474,7 @@ export const PullRequest = ({
           </Tabs>
           <div className="h-32">{/* // TODO: ------ */}</div>
         </div>
+        <div className=" w-full h-[clamp(80px,10vh,200px)] smooth-blur absolute bottom-0"></div>
       </ScrollArea>
     </div>
   );

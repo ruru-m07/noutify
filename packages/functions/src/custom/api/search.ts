@@ -17,13 +17,6 @@ export async function searchissuesandpullrequests({
     | RestEndpointMethodTypes["search"]["issuesAndPullRequests"]["response"]["data"]["items"]
     | undefined;
 }> {
-  console.log({
-    q,
-    per_page,
-    page,
-    token,
-  });
-
   const response = await fetch(
     `https://api.github.com/search/issues?q=${q}&per_page=${per_page}&page=${page}`,
     {
@@ -43,12 +36,6 @@ export async function searchissuesandpullrequests({
   }
 
   const data = await response.json();
-
-  console.log({
-    data,
-    total_count: data.total_count,
-    incomplete_results: data.incomplete_results,
-  });
-
+  
   return data;
 }

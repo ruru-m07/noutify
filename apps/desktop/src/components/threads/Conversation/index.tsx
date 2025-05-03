@@ -1,6 +1,5 @@
+import type { Notification } from "@/types";
 import React from "react";
-
-import type { Notification } from "@/context/appState";
 
 export const Conversation = ({
   notification,

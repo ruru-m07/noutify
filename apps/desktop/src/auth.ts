@@ -2,6 +2,21 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { getUpStreamURL } from "./actions/getUpStream";
 
+export type User = {
+  name: string;
+  email: string;
+  image: string;
+  profile: {
+    login: string;
+    id: number;
+    avatar_url: string;
+    url: string;
+    type: string;
+    name: string;
+    email: string;
+  };
+};
+
 export const {
   handlers,
   auth,
@@ -13,60 +28,31 @@ export const {
   providers: [
     Credentials({
       credentials: {
-        code: {},
-        deviceId: {},
+        name: {},
+        email: {},
+        image: {},
+        plogin: {},
+        pid: {},
+        pavatar_url: {},
+        purl: {},
+        ptype: {},
+        pname: {},
+        pemail: {},
       },
       authorize: async (credentials) => {
-        const streamURL = await getUpStreamURL();
-        const response = await fetch(`${streamURL}/api/auth/verify-code`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            deviceId: credentials.deviceId,
-            code: credentials.code,
-          }),
-        });
-
-        const jsonResponse: {
-          success: boolean;
-          error?: string;
-          data?: {
-            session: string;
-          };
-        } = await response.json();
-
-        if (jsonResponse.error) {
-          return null;
-        }
-        if (!jsonResponse.success) {
-          return null;
-        }
-
-        const parsedData: {
-          user: {
-            name: string;
-            email: string;
-            image: string;
-            profile: Profile;
-            accessToken: string;
-          };
-        } = JSON.parse(jsonResponse?.data?.session || "{}");
         const newSession = {
-          name: parsedData.user.name,
-          email: parsedData.user.email,
-          image: parsedData.user.image,
+          name: credentials.name as string,
+          email: credentials.email as string,
+          image: credentials.image as string,
           profile: {
-            login: parsedData.user.profile.login,
-            id: parsedData.user.profile.id,
-            avatar_url: parsedData.user.profile.avatar_url,
-            url: parsedData.user.profile.url,
-            type: parsedData.user.profile.type,
-            name: parsedData.user.profile.name,
-            email: parsedData.user.profile.email,
+            login: credentials.plogin as string,
+            id: credentials.pid as string,
+            avatar_url: credentials.pavatar_url as string,
+            url: credentials.purl as string,
+            type: credentials.ptype as string,
+            name: credentials.pname as string,
+            email: credentials.pemail as string,
           },
-          accessToken: parsedData.user.accessToken,
         };
 
         return newSession;
@@ -77,7 +63,13 @@ export const {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === "update" && session) {
+        token.accessToken = session.user.accessToken;
+        console.log({
+          hmm: session.user.accessToken,
+        });
+      }
       if (user) {
         token.profile = user.profile;
         token.accessToken = user.accessToken;

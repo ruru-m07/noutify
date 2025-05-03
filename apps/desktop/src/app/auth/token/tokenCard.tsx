@@ -52,6 +52,10 @@ const TokenCard = ({ session }: { session: Session }) => {
           setLoading(true);
           (async () => {
             const result = await setTokenAction({ token });
+            console.log({
+              result,
+            });
+
             if (result?.error) {
               setError(result.error);
             }
@@ -64,6 +68,7 @@ const TokenCard = ({ session }: { session: Session }) => {
             setLoading(false);
             setToken("");
           })();
+          return false; // Prevent form submission
         }}
         className="flex flex-col items-center justify-center h-screen"
         autoComplete="off"

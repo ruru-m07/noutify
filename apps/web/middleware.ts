@@ -12,7 +12,6 @@ export default async function middleware(req: NextRequest) {
     "/",
     "/auth/login",
     "/auth/token",
-    "/api/auth/verify-code",
   ];
 
   // Allow access to public routes

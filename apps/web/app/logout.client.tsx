@@ -2,15 +2,12 @@
 
 import { signOutAction } from "@/actions/signOut";
 import { Button } from "@noutify/ui/components/button";
-import { Separator } from "@noutify/ui/components/separator";
 import { LogOut } from "lucide-react";
 import React from "react";
 
 const LogoutButton = ({ loading = false }: { loading?: boolean }) => {
   return (
     <>
-      <Separator />
-
       <Button
         className="w-full text-sm group text-destructive focus:text-destructive bg-destructive/10 hover:bg-destructive/25"
         variant={"destructive"}

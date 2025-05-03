@@ -43,6 +43,7 @@ const Home = () => {
             aria-hidden="true"
           />
         </Link>
+        
       </motion.div>
     </div>
   );

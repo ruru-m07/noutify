@@ -1,15 +1,7 @@
 import { createTempUser } from "@/actions/createTempUser";
 import { NOUTIFY_UP_STREAM } from "@/env";
+import { corsHeaders } from "@/lib/cors";
 import { NextResponse } from "next/server";
-
-function corsHeaders(origin: string) {
-  return {
-    "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Access-Control-Allow-Credentials": "true",
-  };
-}
 
 export async function OPTIONS(req: Request) {
   const origin = req.headers.get("origin") || NOUTIFY_UP_STREAM!;

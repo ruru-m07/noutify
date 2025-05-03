@@ -1,15 +1,15 @@
 "use server";
 
-import fs from "fs";
+import { promises as fs, existsSync } from "fs";
 
 import { TEMP_USER_CONTENT } from "@/lib/constant";
 import { NOUTIFY_DEBUG } from "@/env";
 
 export async function poolTempUser() {
-  if (!fs.existsSync(TEMP_USER_CONTENT)) {
+  if (!existsSync(TEMP_USER_CONTENT)) {
     return { success: false };
   }
-  const fileContent = fs.readFileSync(TEMP_USER_CONTENT, "utf-8");
+  const fileContent = await fs.readFile(TEMP_USER_CONTENT, "utf-8");
   const parsedContent = JSON.parse(fileContent);
 
   console.log({
@@ -19,7 +19,7 @@ export async function poolTempUser() {
   });
 
   if (parsedContent.expire < Date.now()) {
-    fs.unlinkSync(TEMP_USER_CONTENT);
+    await fs.unlink(TEMP_USER_CONTENT);
     return { success: false };
   }
 

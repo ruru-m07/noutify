@@ -38,11 +38,11 @@ const Home = () => {
         className="w-full px-4 sm:px-6 h-[80vh] flex flex-col items-center justify-center"
       >
         <h1 className="title relative px-4 sm:px-12 text-center !font-normal text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:!text-8xl leading-tight sm:leading-tight md:leading-tight lg:leading-[108px]">
-          A Git client built <br className="md:block hidden" />
-          for <span className="text-[#F76F53] italic">maintainers</span>.
+          A Git client  <br className="md:block hidden" />
+          for <span className="text-[#F76F53] italic">lazy</span> peoples.
         </h1>
 
-        <p className="px-4 sm:px-12 flex flex-wrap max-w-[34rem] justify-center text-center lg:px-0 text-sm sm:text-base font-semibold mt-4 text-[#A7A59B]">
+        <p className="px-4 sm:px-12 flex flex-wrap max-w-[34rem] justify-center text-center lg:px-0 text-sm sm:text-base font-semibold mt-6 text-[#A7A59B]">
           Manage issues <CircleDotDashed className="mt-1 mx-1" size={16} />,
           pull requests <GitPullRequestArrow className="mt-1 mx-1" size={16} />,
           and

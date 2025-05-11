@@ -7,6 +7,7 @@ import {
   nativeImage,
   Tray,
   Menu,
+  dialog,
 } from "electron";
 import { getPort } from "get-port-please";
 import { join } from "path";
@@ -196,6 +197,19 @@ app.whenReady().then(() => {
   createWindow();
 
   ipcMain.on("ping", () => console.log("pong"));
+
+  ipcMain.handle("select-folder", async () => {
+    const result = await dialog.showOpenDialog({
+      properties: ["openDirectory"],
+    });
+
+    if (result.canceled || result.filePaths.length === 0) {
+      return null;
+    }
+
+    return result.filePaths[0];
+  });
+
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
     else mainWindow?.show();

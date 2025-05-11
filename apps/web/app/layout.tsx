@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import NextTopLoader from "nextjs-toploader";
 
+import { Bricolage_Grotesque } from "next/font/google";
+
 import { ContextProvider } from "@/context";
 
 import "@noutify/ui/globals.css";
@@ -11,6 +13,12 @@ export const metadata: Metadata = {
   title: "Noutify",
   description: "let him cook!",
 };
+
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
 
 export default async function RootLayout({
   children,
@@ -41,7 +49,8 @@ export default async function RootLayout({
         />
         <link rel="manifest" href="/favicon/site.webmanifest" />
       </head>
-      <body className={GeistSans.className}>
+      {/* <body className={GeistSans.className}> */}
+      <body className={bricolage.className}>
         <NextTopLoader
           color="#ffffff"
           initialPosition={0.08}

@@ -1,3 +1,4 @@
+import { log } from "../../utils/logger";
 import { z } from "zod";
 
 export const CommitSchema = z.object({
@@ -123,14 +124,22 @@ export async function getCommit(
   );
 
   if (!response.ok) {
+    log.error(
+      `[getCommit]: error fetching commit ${commit_sha} from ${owner}/${repo}: ${response.statusText}`
+    );
     throw new Error(`Error fetching commit: ${response.statusText}`);
   }
 
   const data = await response.json();
 
   try {
-    return CommitSchema.parse(data);
+    const finalData = CommitSchema.parse(data);
+    log.info("[getCommit]: commit fetched successfully");
+    return finalData;
   } catch (error) {
+    log.error(
+      `[getCommit]: error validating commit ${commit_sha} from ${owner}/${repo}: ${error}`
+    );
     return data;
     // if (error instanceof z.ZodError) {
     //   console.error("Validation error:", error.format());

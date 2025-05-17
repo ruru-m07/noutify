@@ -2,6 +2,7 @@ import type { Octokit } from "@octokit/rest";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 
 import { getGitHubHeaders } from "../utils";
+import { log } from "../utils/logger";
 
 export class IssuesAPI {
   constructor(
@@ -20,7 +21,7 @@ export class IssuesAPI {
       issue_number,
       headers: getGitHubHeaders(this.apiVersion),
     });
-
+    log.info("[issues:get]: issue fetched successfully");
     return response.data;
   }
 }

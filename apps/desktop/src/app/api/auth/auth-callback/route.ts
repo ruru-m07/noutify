@@ -1,6 +1,7 @@
 import { getTempCode } from "@/actions/getTempCode";
 import { NOUTIFY_DEBUG, NOUTIFY_UP_STREAM } from "@/env";
 import { corsHeaders } from "@/lib/cors";
+import { log } from "@/lib/logger";
 import { NextResponse } from "next/server";
 
 export async function OPTIONS(req: Request) {
@@ -19,6 +20,7 @@ export async function POST(req: Request) {
 
   const tempCode = await getTempCode();
 
+  log.debug("TEMP_CODE_FILE", tempCode);
   if (JSON.parse(tempCode).code !== code) {
     return NextResponse.json(
       {
@@ -29,10 +31,7 @@ export async function POST(req: Request) {
     );
   }
 
-  if (NOUTIFY_DEBUG) {
-    console.log("Code validated successfully");
-  }
-
+  log.debug("Code validated successfully for user:", req.headers.get("user-id"));
   return NextResponse.json(
     {
       success: true,

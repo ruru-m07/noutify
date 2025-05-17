@@ -7,6 +7,7 @@ import { PullsAPI } from "./api/pulls";
 import { IssuesAPI } from "./api/issues";
 import { SearchAPI } from "./api/search";
 import { ReactionsAPI } from "./api/reactions";
+import { RateLimitAPI } from "./api/rateLimit";
 
 export interface GithubClientOptions {
   token: string;
@@ -24,6 +25,7 @@ export class GithubClient {
   public readonly issues: IssuesAPI;
   public readonly search: SearchAPI;
   public readonly reactions: ReactionsAPI;
+  public readonly rateLimit: RateLimitAPI;
 
   private octokit: Octokit;
   private apiVersion: string;
@@ -42,5 +44,6 @@ export class GithubClient {
     this.issues = new IssuesAPI(this.octokit, this.apiVersion);
     this.search = new SearchAPI(this.octokit, this.apiVersion);
     this.reactions = new ReactionsAPI(this.octokit, this.apiVersion);
+    this.rateLimit = new RateLimitAPI(this.octokit, this.apiVersion);
   }
 }

@@ -1,0 +1,14 @@
+{
+  "name": "@noutify/log",
+  "module": "index.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@noutify/tsconfig": "*"
+  }
+}

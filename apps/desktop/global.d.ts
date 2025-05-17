@@ -12,6 +12,7 @@ declare global {
         ) => void;
       };
       openExternal: (url: string) => Promise<void>;
+      selectFolder: () => Promise<any>;
     };
   }
 }

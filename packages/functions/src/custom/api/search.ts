@@ -1,3 +1,4 @@
+import { log } from "../../utils/logger";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 
 export async function searchissuesandpullrequests({
@@ -30,12 +31,24 @@ export async function searchissuesandpullrequests({
   );
 
   if (!response.ok) {
+    log.error(
+      `[searchissuesandpullrequests]: error fetching issues and pull requests: ${response.statusText}`
+    );
     throw new Error(
       `Error fetching issues and pull requests: ${response.statusText}`
     );
   }
 
   const data = await response.json();
-  
+  if (data.items.length === 0) {
+    log.warn("No issues or pull requests found.");
+    return {
+      incomplete_results: false,
+      total_count: 0,
+      items: [],
+    };
+  }
+
+  log.info("Issues and pull requests fetched successfully.");
   return data;
 }

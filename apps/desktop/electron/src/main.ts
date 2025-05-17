@@ -7,9 +7,10 @@ import {
   nativeImage,
   Tray,
   Menu,
+  dialog,
 } from "electron";
 import { getPort } from "get-port-please";
-import { join } from "path";
+import path, { join } from "path";
 import { spawn } from "child_process";
 import type { ChildProcess } from "child_process";
 
@@ -24,6 +25,9 @@ let tray: Tray | null = null;
 let serverProcess: ChildProcess | null = null;
 let mainWindow: BrowserWindow | null = null;
 let isQuiting = false;
+
+const userDataPath = app.getPath("userData");
+console.log("user data path: ", userDataPath)
 
 const createWindow = (): BrowserWindow => {
   mainWindow = new BrowserWindow({
@@ -78,9 +82,6 @@ const createWindow = (): BrowserWindow => {
     } else {
       try {
         const port = await startNextJSServer();
-        if (NOUTIFY_DEBUG === "true") {
-          console.log("Next.js server started on port:", port);
-        }
         mainWindow!.loadURL(`http://localhost:${port}`);
       } catch (error) {
         console.error("Error starting Next.js server:", error);
@@ -108,18 +109,13 @@ const startNextJSServer = async (): Promise<string> => {
       (await getPort({ portRange: [30011, 50000] })).toString();
     const serverPath = join(app.getAppPath(), ".next/standalone/server.js");
 
-    if (NOUTIFY_DEBUG === "true") {
-      console.log({
-        nextJSPort,
-        getAppPath: app.getAppPath(),
-        serverPath,
-      });
-    }
-
     if (!NOUTIFY_AUTH_SECRET) {
-      console.error("NOUTIFY_AUTH_SECRET is not set!");
+      console.error(
+        "NOUTIFY_AUTH_SECRET is not set. Please set it in your environment."
+      );
       process.exit(1);
     }
+
 
     serverProcess = spawn("node", [serverPath], {
       shell: true,
@@ -130,6 +126,7 @@ const startNextJSServer = async (): Promise<string> => {
         AUTH_SECRET: NOUTIFY_AUTH_SECRET,
         // NEXT_PUBLIC_UP_STREAM: process.env.NEXT_PUBLIC_UP_STREAM
         NEXT_PUBLIC_UP_STREAM: "http://localhost:3001",
+        NOUTIFY_USER_DATA_PATH: userDataPath,
       },
       stdio: ["ignore", "pipe", "pipe"],
     });
@@ -176,7 +173,6 @@ process.on("SIGINT", () => {
 });
 
 ipcMain.handle("open-external", async (_event, url: string) => {
-  console.log("Opening external:", url);
   await shell.openExternal(url);
 });
 
@@ -196,6 +192,19 @@ app.whenReady().then(() => {
   createWindow();
 
   ipcMain.on("ping", () => console.log("pong"));
+
+  ipcMain.handle("select-folder", async () => {
+    const result = await dialog.showOpenDialog({
+      properties: ["openDirectory"],
+    });
+
+    if (result.canceled || result.filePaths.length === 0) {
+      return null;
+    }
+
+    return result.filePaths[0];
+  });
+
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
     else mainWindow?.show();
@@ -205,7 +214,7 @@ app.whenReady().then(() => {
   const trayIcon = nativeImage.createFromPath(iconPath);
   tray = new Tray(trayIcon);
 
-  tray.setToolTip("Your App Name");
+  tray.setToolTip("Noutify");
 
   const contextMenu = Menu.buildFromTemplate([
     {

@@ -34,7 +34,7 @@ jobs:
         run: rm -rf apps/desktop/dist
 
       - name: Run build
-        run: bun run build --filter desktop
+        run: bun run build --filter noutify
 
       - name: Extract metadata
         id: meta

@@ -2,6 +2,7 @@
 
 import type { Notification } from "@/types";
 import { getGithubClient } from "@/lib/ghClient";
+import { log } from "@/lib/logger";
 
 export async function listNotifications({
   all,
@@ -10,6 +11,9 @@ export async function listNotifications({
   all?: boolean;
   read?: boolean;
 }): Promise<Notification[]> {
+  log.debug(
+    `[listNotifications]: Fetching notifications with all: ${all}, read: ${read}`
+  );
   const ghClient = await getGithubClient();
 
   const notifications = await ghClient.activity.listNotifications({
@@ -18,7 +22,7 @@ export async function listNotifications({
     // page: 1,
     per_page: 20,
     all,
-    read, 
+    read,
   });
 
   const pullRequestNotifications = notifications.filter(
@@ -52,6 +56,9 @@ export async function listNotifications({
       (prNotification) => prNotification.id === notification.id
     );
     if (prIndex !== -1) {
+      log.info(
+        `[listNotifications]: Pull request notification found for ${notification.subject.title}`
+      );
       return {
         ...notification,
         pullRequest: pullRequests[prIndex],
@@ -62,20 +69,34 @@ export async function listNotifications({
       (issueNotification) => issueNotification.id === notification.id
     );
     if (issueIndex !== -1) {
+      log.info(
+        `[listNotifications]: Issue notification found for ${notification.subject.title}`
+      );
       return {
         ...notification,
         issue: issues[issueIndex],
       };
     }
 
+    log.info(
+      `[listNotifications]: Notification found for ${notification.subject.title}`
+    );
     return notification;
   });
 
+  log.info(
+    `[listNotifications]: ${prStatuses.length} notifications fetched successfully`
+  );
   return prStatuses;
 }
 
 export async function getAuthenticatedUser() {
   const ghClient = await getGithubClient();
 
+  if (!ghClient) {
+    log.error("GitHub client is not initialized");
+    throw new Error("GitHub client is not initialized");
+  }
+  log.info("Authenticated user fetched successfully");
   return await ghClient.users.getAuthenticatedUser();
 }

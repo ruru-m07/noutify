@@ -39,7 +39,7 @@ jobs:
           bun install
 
       - name: Build app
-        run: bun run build --filter desktop
+        run: bun run build --filter noutify
 
       - name: Extract metadata
         id: meta

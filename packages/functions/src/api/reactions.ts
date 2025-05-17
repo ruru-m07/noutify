@@ -2,6 +2,7 @@ import type { Octokit } from "@octokit/rest";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 
 import { getGitHubHeaders } from "../utils";
+import { log } from "../utils/logger";
 
 export class ReactionsAPI {
   constructor(
@@ -23,7 +24,7 @@ export class ReactionsAPI {
       per_page: 300,
       headers: getGitHubHeaders(this.apiVersion),
     });
-
+    log.info("[reactions:listForIssue]: reactions fetched successfully");
     return response.data;
   }
 
@@ -42,7 +43,7 @@ export class ReactionsAPI {
       content,
       headers: getGitHubHeaders(this.apiVersion),
     });
-
+    log.info("[reactions:createForIssue]: reaction created successfully");
     return response.data;
   }
 
@@ -63,9 +64,13 @@ export class ReactionsAPI {
     });
 
     if (response.status !== 204) {
-      throw new Error("Failed to delete reaction!");
+      log.error(
+        `[reactions:deleteForIssue]: failed to delete reaction, status code: ${response.status}`
+      );
+      return { success: false };
     }
 
+    log.info("[reactions:deleteForIssue]: reaction deleted successfully");
     return { success: true };
   }
 }

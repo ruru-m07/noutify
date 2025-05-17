@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
   // TODO: will make a seprate build for the server and client.
   // cacheMaxMemorySize: 0,
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
+    // removeConsole: process.env.NODE_ENV === "production",
   },
   images: {
     remotePatterns: [

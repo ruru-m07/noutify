@@ -8,4 +8,5 @@ contextBridge.exposeInMainWorld("electron", {
       ipcRenderer.on(channel, listener),
   },
   openExternal: (url: string) => ipcRenderer.invoke("open-external", url),
+  selectFolder: () => ipcRenderer.invoke("select-folder"),
 });

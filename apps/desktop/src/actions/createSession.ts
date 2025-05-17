@@ -1,5 +1,7 @@
 "use server";
 
+import { log } from "@/lib/logger";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export async function createSession({ user }: { user: any }) {
   const { signIn } = await import("@/auth");
@@ -18,6 +20,7 @@ export async function createSession({ user }: { user: any }) {
     redirectTo: "/",
   });
 
+  log.info("Session created successfully for user: ", user.name);
   return {
     success: true,
   };

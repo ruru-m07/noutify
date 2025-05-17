@@ -1,6 +1,7 @@
 import { createTempUser } from "@/actions/createTempUser";
 import { NOUTIFY_UP_STREAM } from "@/env";
 import { corsHeaders } from "@/lib/cors";
+import { log } from "@/lib/logger";
 import { NextResponse } from "next/server";
 
 export async function OPTIONS(req: Request) {
@@ -22,6 +23,7 @@ export async function POST(req: Request) {
   const { success } = await createTempUser({ user });
 
   if (!success) {
+    log.error("Failed to create temp user:", user);
     return NextResponse.json(
       {
         success: false,
@@ -31,6 +33,7 @@ export async function POST(req: Request) {
     );
   }
 
+  log.debug("Temp user created successfully:", user);
   return NextResponse.json(
     {
       success: true,

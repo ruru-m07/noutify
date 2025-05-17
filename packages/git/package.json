@@ -1,0 +1,22 @@
+{
+  "name": "@noutify/git",
+  "module": "index.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    },
+    "./types": {
+      "import": "./src/types/index.ts"
+    }
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@noutify/tsconfig": "*",
+    "@noutify/log": "*"
+  },
+  "dependencies": {
+    "@octokit/rest": "^21.1.0",
+    "zod": "^3.24.2"
+  }
+}

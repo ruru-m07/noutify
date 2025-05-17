@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
+import { log } from "@/lib/logger";
 import { searchissuesandpullrequests } from "@noutify/functions/custom/api";
 
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
@@ -17,7 +18,7 @@ export async function loadMorePullRequests(
     | undefined;
 }> {
   const session = await auth();
-  
+  log.debug(`Loading more pull requests for query: ${q}`);
   const {
     incomplete_results,
     total_count,
@@ -29,6 +30,9 @@ export async function loadMorePullRequests(
     token: session.user.accessToken,
   });
 
+  log.info(
+    `Loaded ${pullRequests?.length} pull requests, total count: ${total_count}`
+  );
   return {
     pullRequests,
     nextPage,

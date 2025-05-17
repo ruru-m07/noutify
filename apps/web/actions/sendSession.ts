@@ -20,10 +20,6 @@ export async function sendSession({ port }: { port: string }) {
     },
   };
 
-  console.log({
-    user,
-  });
-
   const res = await fetch(`http://localhost:${port}/api/auth/create-session`, {
     method: "POST",
     headers: {

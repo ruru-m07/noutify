@@ -66,6 +66,7 @@ export const GitProvider: React.FC<GitProviderProps> = ({ children }) => {
   }
 
   const getStatus = async () => {
+    console.log(selectedRepo);
     const gitStatus = await getGitStatus(selectedRepo?.path as string);
     if (gitStatus.success) {
       setStatus(gitStatus.data);
@@ -112,9 +113,17 @@ export const GitProvider: React.FC<GitProviderProps> = ({ children }) => {
     (async () => {
       await updateRepoList();
       await updateLastSelectedRepo();
-      await getStatus();
     })();
   }, []);
+  
+  useEffect(() => {
+    (async () => {
+      if (selectedRepo) {
+        await getStatus();
+      }
+    })();
+  }, [selectedRepo]);
+  
 
   const value: GitContextType = {
     allLocalRepos,

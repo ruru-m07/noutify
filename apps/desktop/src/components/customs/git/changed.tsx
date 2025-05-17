@@ -3,7 +3,7 @@
 import React from "react";
 import { useEffect } from "react";
 
-import { addStaged, getGitStatus, removeStaged } from "@noutify/git";
+import { addStaged, removeStaged } from "@noutify/git";
 
 import { Checkbox } from "@noutify/ui/components/checkbox";
 import { Label } from "@noutify/ui/components/label";
@@ -41,11 +41,14 @@ const ChangedFiles = () => {
             }
             id="select-all"
             onCheckedChange={(c) => {
+              if (!selectedRepo?.path) {
+                return;
+              }
               if (c) {
-                addStaged("/home/ruru/Projects/noutify", ".");
+                addStaged(selectedRepo?.path, ".");
                 // getStatus();
               } else {
-                removeStaged("/home/ruru/Projects/noutify", ".");
+                removeStaged(selectedRepo?.path, ".");
                 // getStatus();
               }
             }}
@@ -72,11 +75,14 @@ const ChangedFiles = () => {
                     id={`id-${i}`}
                     defaultChecked={status.staged.includes(v.path)}
                     onCheckedChange={(c) => {
+                      if (!selectedRepo?.path) {
+                        return;
+                      }
                       if (c) {
-                        addStaged("/home/ruru/Projects/noutify", v.path);
+                        addStaged(selectedRepo?.path, v.path);
                         // getStatus();
                       } else {
-                        removeStaged("/home/ruru/Projects/noutify", v.path);
+                        removeStaged(selectedRepo?.path, v.path);
                         // getStatus();
                       }
                     }}
@@ -106,9 +112,7 @@ const ChangedFiles = () => {
                   </Label>
                 </div>
               </div>
-              <div className="flex-shrink-0 ml-2">
-                 {getStatusIcon(v)}
-              </div>
+              <div className="flex-shrink-0 ml-2">{getStatusIcon(v)}</div>
             </div>
           );
         })}

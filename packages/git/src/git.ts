@@ -38,6 +38,10 @@ export async function getGitStatus(
   baseDir: string
 ): Promise<GitResult<StatusResult>> {
   try {
+    console.log({
+      baseDir,
+    });
+
     const git = getGitInstance(baseDir);
     const statusResult = await git.status();
 
@@ -124,8 +128,8 @@ export async function getGitDiff(
     console.log({
       baseDir,
       files,
-    })
-    
+    });
+
     const git = getGitInstance(baseDir);
     const diffResult = await git.diff([files]);
     log.info("Git diff fetched successfully");

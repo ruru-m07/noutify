@@ -60,22 +60,24 @@ const Page = () => {
         </div>
       </div>
       <div className="h-11 border-b flex items-center justify-between px-4 gap-2">
-        <div className="flex items-center gap-2">
-          {selectedFile?.meta && getStatusIcon(selectedFile?.meta)}
-          <Label className="flex items-center min-w-0 w-full">
-            {selectedFile?.meta.path.split("/").slice(0, -1).join("/") && (
-              <>
-                <span className="text-muted-foreground -mr-0.5">
-                  {selectedFile.meta.path.split("/").slice(0, -1).join("/")}
-                </span>
-                <span className="text-muted-foreground">/</span>
-              </>
-            )}
-            <span className="flex-shrink-0">
-              {selectedFile?.meta.path.split("/").slice(-1)[0]}
-            </span>
-          </Label>
-        </div>
+        {selectedFile && (
+          <div className="flex items-center gap-2">
+            {selectedFile?.meta && getStatusIcon(selectedFile?.meta)}
+            <Label className="flex items-center min-w-0 w-full">
+              {selectedFile?.meta.path.split("/").slice(0, -1).join("/") && (
+                <>
+                  <span className="text-muted-foreground -mr-0.5">
+                    {selectedFile.meta.path.split("/").slice(0, -1).join("/")}
+                  </span>
+                  <span className="text-muted-foreground">/</span>
+                </>
+              )}
+              <span className="flex-shrink-0">
+                {selectedFile?.meta.path.split("/").slice(-1)[0]}
+              </span>
+            </Label>
+          </div>
+        )}
         <Button variant={"ghost"} size="icon">
           <Settings size={20} />
         </Button>

@@ -2,6 +2,7 @@ import type { Octokit } from "@octokit/rest";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 
 import { getGitHubHeaders } from "../utils";
+import { log } from "../utils/logger";
 
 export class UsersAPI {
   constructor(
@@ -15,6 +16,9 @@ export class UsersAPI {
     const response = await this.octokit.users.getAuthenticated({
       headers: getGitHubHeaders(this.apiVersion),
     });
+    log.info(
+      "[users:getAuthenticatedUser]: authenticated user fetched successfully"
+    );
     return response.data;
   }
 }

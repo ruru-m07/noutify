@@ -1,5 +1,5 @@
 {
-  "name": "desktop",
+  "name": "noutify",
   "description": "Noutify Desktop",
   "version": "0.0.1",
   "private": true,
@@ -34,6 +34,7 @@
     "@eslint/js": "^9.20.0",
     "@noutify/eslint": "*",
     "@noutify/tsconfig": "*",
+    "@noutify/log": "*",
     "@types/jsonwebtoken": "^9.0.8",
     "@types/node": "^22.10.1",
     "@types/react": "18.3.1",

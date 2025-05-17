@@ -1,6 +1,7 @@
 "use server";
 
 import { getGithubClient } from "@/lib/ghClient";
+import { log } from "@/lib/logger";
 
 export const deleteReaction = async (
   owner: string,
@@ -18,8 +19,14 @@ export const deleteReaction = async (
   );
 
   if (!data) {
+    log.error(
+      `[deleteReaction]: Failed to delete reaction for issue ${number} in ${owner}/${repo}`
+    );
     throw new Error("Failed to delete reaction!");
   }
 
+  log.info(
+    `[deleteReaction]: Reaction deleted for issue ${number} in ${owner}/${repo}`
+  );
   return data;
 };

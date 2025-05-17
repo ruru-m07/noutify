@@ -1,6 +1,7 @@
 "use server";
 
 import { getGithubClient } from "@/lib/ghClient";
+import { log } from "@/lib/logger";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 
 export const createReaction = async (
@@ -18,7 +19,13 @@ export const createReaction = async (
     content
   );
   if (!data) {
+    log.error(
+      `[createReaction]: Failed to create reaction for issue ${number} in ${owner}/${repo}`
+    );
     throw new Error("Failed to create reaction");
   }
+  log.info(
+    `[createReaction]: Reaction ${content} created for issue ${number} in ${owner}/${repo}`
+  );
   return data;
 };

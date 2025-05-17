@@ -1,5 +1,6 @@
 import { machineIdSync } from "node-machine-id";
 import crypto from "crypto";
+import { log } from "@/lib/logger";
 
 export const GET = async () => {
   const fingerprint = machineIdSync();
@@ -8,6 +9,7 @@ export const GET = async () => {
     .update(fingerprint)
     .digest("hex");
 
+  log.debug("Generated deviceId:", deviceId);
   return new Response(deviceId, {
     status: 200,
     headers: {

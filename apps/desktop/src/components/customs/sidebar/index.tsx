@@ -25,9 +25,14 @@ import {
   Settings,
   Star,
 } from "lucide-react";
+import { getGithubClient } from "@/lib/ghClient";
 
 const Sidebar = async () => {
   const session = await auth();
+
+  const ghClient = await getGithubClient();
+
+  const rateLimit = await ghClient.rateLimit.getRateLimit();
 
   return (
     <div className="h-screen w-[--sidebar-width] flex flex-col justify-between items-center -mr-2">
@@ -121,7 +126,7 @@ const Sidebar = async () => {
 
       <div className="m-2">
         <div className="space-y-2">
-          <AvatarDropdown user={session?.user.profile} />
+          <AvatarDropdown rateLimit={rateLimit} user={session?.user.profile} />
         </div>
       </div>
     </div>

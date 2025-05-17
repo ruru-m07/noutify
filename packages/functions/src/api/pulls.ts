@@ -2,6 +2,7 @@ import type { Octokit } from "@octokit/rest";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 
 import { getGitHubHeaders } from "../utils";
+import { log } from "../utils/logger";
 
 export class PullsAPI {
   constructor(
@@ -21,6 +22,7 @@ export class PullsAPI {
       headers: getGitHubHeaders(this.apiVersion),
     });
 
+    log.info("[pulls:get]: pull fetched successfully");
     return response.data;
   }
 
@@ -33,7 +35,7 @@ export class PullsAPI {
       repo,
       headers: getGitHubHeaders(this.apiVersion),
     });
-
+    log.info("[pulls:list]: pulls fetched successfully");
     return response.data;
   }
 
@@ -51,7 +53,7 @@ export class PullsAPI {
       per_page: 100,
       headers: getGitHubHeaders(this.apiVersion),
     });
-
+    log.info("[pulls:listEvents]: events fetched successfully");
     return response.data;
   }
 
@@ -69,6 +71,9 @@ export class PullsAPI {
       headers: getGitHubHeaders(this.apiVersion),
     });
 
+    log.info(
+      "[pulls:listReviewComments]: review comments fetched successfully"
+    );
     return response.data;
   }
 }

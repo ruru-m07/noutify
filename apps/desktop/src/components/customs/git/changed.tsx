@@ -10,30 +10,22 @@ import { Label } from "@noutify/ui/components/label";
 import { ScrollArea } from "@noutify/ui/components/scroll-area";
 import { cn } from "@noutify/ui/lib/utils";
 
-import {
-  AlertTriangle,
-  SquareDot,
-  SquarePlus,
-  SquareX,
-} from "lucide-react";
-import type { StatusResult } from "simple-git";
+import { AlertTriangle, SquareDot, SquarePlus, SquareX } from "lucide-react";
+import { useGit } from "@/context/git";
+import type { FileStatusResult } from "simple-git";
 
 const ChangedFiles = () => {
-  const [status, setStatus] = React.useState<StatusResult>();
-
-  const getStatus = async () => {
-    const gitStatus = await getGitStatus("/home/ruru/Projects/noutify");
-    if (gitStatus.success) {
-      setStatus(gitStatus.data);
-      console.log({
-        data: gitStatus.data,
-      });
-    }
-  };
+  const { status, selectedRepo, updateGitDiff } = useGit();
 
   useEffect(() => {
-    getStatus();
-  }, []);
+    try {
+      if (selectedRepo?.path && status?.files.length) {
+        updateGitDiff(selectedRepo?.path, status?.files[0]);
+      }
+    } catch (error) {
+      console.error("Error in GitProvider:", error);
+    }
+  }, [selectedRepo, selectedRepo?.path, status]);
 
   return (
     <>
@@ -51,10 +43,10 @@ const ChangedFiles = () => {
             onCheckedChange={(c) => {
               if (c) {
                 addStaged("/home/ruru/Projects/noutify", ".");
-                getStatus();
+                // getStatus();
               } else {
                 removeStaged("/home/ruru/Projects/noutify", ".");
-                getStatus();
+                // getStatus();
               }
             }}
           />
@@ -82,18 +74,23 @@ const ChangedFiles = () => {
                     onCheckedChange={(c) => {
                       if (c) {
                         addStaged("/home/ruru/Projects/noutify", v.path);
-                        getStatus();
+                        // getStatus();
                       } else {
                         removeStaged("/home/ruru/Projects/noutify", v.path);
-                        getStatus();
+                        // getStatus();
                       }
                     }}
                   />
                 </div>
                 <div className="flex items-center gap-0 ml-2 min-w-0 w-full">
                   <Label
-                    htmlFor={`id-${i}`}
+                    // htmlFor={`id-${i}`}
                     className="flex items-center min-w-0 w-full"
+                    onClick={() => {
+                      if (selectedRepo?.path) {
+                        updateGitDiff(selectedRepo?.path, v);
+                      }
+                    }}
                   >
                     {v?.path.split("/").slice(0, -1).join("/") && (
                       <>
@@ -110,17 +107,7 @@ const ChangedFiles = () => {
                 </div>
               </div>
               <div className="flex-shrink-0 ml-2">
-                {v.index === "U" || v.working_dir === "U" ? (
-                  <AlertTriangle className="text-orange-500" size={20} />
-                ) : v.index === "D" || v.working_dir === "D" ? (
-                  <SquareX className="text-red-500" size={20} />
-                ) : v.index === "A" ||
-                  v.working_dir === "?" ||
-                  v.index === "?" ? (
-                  <SquarePlus className="text-green-500" size={20} />
-                ) : v.index === "M" || v.working_dir === "M" ? (
-                  <SquareDot className="text-yellow-500" size={20} />
-                ) : null}
+                 {getStatusIcon(v)}
               </div>
             </div>
           );
@@ -131,3 +118,19 @@ const ChangedFiles = () => {
 };
 
 export default ChangedFiles;
+
+export function getStatusIcon(v: FileStatusResult) {
+  return (
+    <>
+      {v.index === "U" || v.working_dir === "U" ? (
+        <AlertTriangle className="text-orange-500" size={20} />
+      ) : v.index === "D" || v.working_dir === "D" ? (
+        <SquareX className="text-red-500" size={20} />
+      ) : v.index === "A" || v.working_dir === "?" || v.index === "?" ? (
+        <SquarePlus className="text-green-500" size={20} />
+      ) : v.index === "M" || v.working_dir === "M" ? (
+        <SquareDot className="text-yellow-500" size={20} />
+      ) : null}
+    </>
+  );
+}

@@ -2,6 +2,7 @@ import type { Octokit } from "@octokit/rest";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 
 import { getGitHubHeaders } from "../utils";
+import { log } from "../utils/logger";
 
 export class ReposAPI {
   constructor(
@@ -20,6 +21,7 @@ export class ReposAPI {
       ...params,
       headers: getGitHubHeaders(this.apiVersion),
     });
+    log.info("[repos:listRepositories]: repositories fetched successfully");
     return response.data;
   }
 
@@ -32,6 +34,7 @@ export class ReposAPI {
       repo,
       headers: getGitHubHeaders(this.apiVersion),
     });
+    log.info("[repos:getRepository]: repository fetched successfully");
     return response.data;
   }
 }

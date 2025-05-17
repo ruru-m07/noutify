@@ -3,6 +3,7 @@
 import { type StatusResult } from "simple-git";
 import simpleGit from "simple-git";
 import type { GitResult } from "./type";
+import { log } from "./utils/logger";
 
 /**
  * ? A server-side cache to store SimpleGit instances by `baseDir` (IDK if it will works or not)
@@ -41,10 +42,10 @@ export async function getGitStatus(
     const statusResult = await git.status();
 
     const serializableStatus = serializeToPlainObject(statusResult);
-
+    log.info("Git status success");
     return { success: true, data: serializableStatus as StatusResult };
   } catch (error) {
-    console.error("[Git Error]:", error);
+    log.error("Failed to get git status:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
@@ -63,9 +64,10 @@ export async function addStaged(
 
     const serializableStatus = serializeToPlainObject(statusResult);
 
+    log.info("Files added successfully");
     return { success: true, data: serializableStatus as StatusResult };
   } catch (error) {
-    console.error("[Git Error]:", error);
+    log.error("Failed to add files:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
@@ -84,9 +86,56 @@ export async function removeStaged(
 
     const serializableStatus = serializeToPlainObject(statusResult);
 
+    log.info("Files removed successfully");
     return { success: true, data: serializableStatus as StatusResult };
   } catch (error) {
-    console.error("[Git Error]:", error);
+    log.error("Failed to remove files:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+      data: null,
+    };
+  }
+}
+
+export async function getRemoteOrigin(
+  baseDir: string
+): Promise<GitResult<string>> {
+  try {
+    const git = getGitInstance(baseDir);
+    const remoteUrl = await git.remote(["get-url", "origin"]);
+    log.info("Remote origin fetched successfully");
+    return { success: true, data: remoteUrl as string };
+  } catch (error) {
+    log.error("Failed to get remote origin:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+      data: null,
+    };
+  }
+}
+
+export async function getGitDiff(
+  baseDir: string,
+  files: string
+): Promise<GitResult<string>> {
+  try {
+    console.log({
+      baseDir,
+      files,
+    })
+    
+    const git = getGitInstance(baseDir);
+    const diffResult = await git.diff([files]);
+    log.info("Git diff fetched successfully");
+    console.log({
+      diffResult,
+    });
+
+    return { success: true, data: diffResult as string };
+  } catch (error) {
+    log.error("Failed to get git diff:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",

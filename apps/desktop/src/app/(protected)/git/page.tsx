@@ -1,6 +1,11 @@
+"use client";
+
 import { DiffViewer } from "@/components/customs/diff/diff-viewer";
+import { getStatusIcon } from "@/components/customs/git/changed";
+import { useGit } from "@/context/git";
 import { Badge } from "@noutify/ui/components/badge";
 import { Button } from "@noutify/ui/components/button";
+import { Label } from "@noutify/ui/components/label";
 import { ScrollArea } from "@noutify/ui/components/scroll-area";
 import {
   ArrowDown,
@@ -12,7 +17,9 @@ import {
 } from "lucide-react";
 import React from "react";
 
-const Page = async () => {
+const Page = () => {
+  const { selectedFile } = useGit();
+
   return (
     <div className="flex flex-col flex-grow overflow-hidden">
       <div className="h-[70px] cursor-pointer transition-all duration-75 border-b px-4 flex items-center justify-start gap-4 bg-primary-foreground/75 flex-shrink-0">
@@ -54,13 +61,20 @@ const Page = async () => {
       </div>
       <div className="h-11 border-b flex items-center justify-between px-4 gap-2">
         <div className="flex items-center gap-2">
-          <SquareDot className="text-yellow-500" size={20} />
-          <div>
-            <span className="text-muted-foreground">
-              apps/desktop/electron/src/
+          {selectedFile?.meta && getStatusIcon(selectedFile?.meta)}
+          <Label className="flex items-center min-w-0 w-full">
+            {selectedFile?.meta.path.split("/").slice(0, -1).join("/") && (
+              <>
+                <span className="text-muted-foreground -mr-0.5">
+                  {selectedFile.meta.path.split("/").slice(0, -1).join("/")}
+                </span>
+                <span className="text-muted-foreground">/</span>
+              </>
+            )}
+            <span className="flex-shrink-0">
+              {selectedFile?.meta.path.split("/").slice(-1)[0]}
             </span>
-            <span>main.ts</span>
-          </div>
+          </Label>
         </div>
         <Button variant={"ghost"} size="icon">
           <Settings size={20} />

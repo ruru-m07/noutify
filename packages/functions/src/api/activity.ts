@@ -2,6 +2,7 @@ import type { Octokit } from "@octokit/rest";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 
 import { getGitHubHeaders } from "../utils";
+import { log } from "../utils/logger";
 
 export class ActivityAPI {
   constructor(
@@ -21,6 +22,7 @@ export class ActivityAPI {
         ...params,
         headers: getGitHubHeaders(this.apiVersion),
       });
+    log.info("[listNotifications]: notifications fetched successfully");
     return data;
   }
 
@@ -33,6 +35,7 @@ export class ActivityAPI {
       ...params,
       headers: getGitHubHeaders(this.apiVersion),
     });
+    log.info("[getThread]: thread fetched successfully");
     return data;
   }
 }

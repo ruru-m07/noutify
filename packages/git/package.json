@@ -12,7 +12,8 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@noutify/tsconfig": "*"
+    "@noutify/tsconfig": "*",
+    "@noutify/log": "*"
   },
   "dependencies": {
     "@octokit/rest": "^21.1.0",

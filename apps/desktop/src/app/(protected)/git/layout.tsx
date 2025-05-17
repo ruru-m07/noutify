@@ -23,7 +23,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@noutify/ui/components/avatar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,113 +37,49 @@ import {
   TooltipTrigger,
 } from "@noutify/ui/components/tooltip";
 import ChangedFiles from "@/components/customs/git/changed";
-
-const dummyData2 = {
-  vercel: [
-    {
-      name: "next.js",
-      path: "/home/ruru/projects/next.js",
-      fullName: "vercel/next.js",
-      visibility: "public",
-      anyUpdate: true,
-    },
-    {
-      name: "ai",
-      path: "/home/ruru/projects/ai",
-      fullName: "vercel/ai",
-      visibility: "private",
-      anyUpdate: false,
-    },
-    {
-      name: "turborepo",
-      path: "/home/ruru/projects/turborepo",
-      fullName: "vercel/turborepo",
-      visibility: "public",
-      anyUpdate: true,
-    },
-    {
-      name: "swr",
-      path: "/home/ruru/projects/swr",
-      fullName: "vercel/swr",
-      visibility: "private",
-      anyUpdate: false,
-    },
-  ],
-  shadcn: [
-    {
-      name: "training-kit",
-      path: "/home/ruru/projects/training-kit",
-      fullName: "shadcn/training-kit",
-      visibility: "public",
-      anyUpdate: false,
-    },
-    {
-      name: "choosealicense.com",
-      path: "/home/ruru/projects/choosealicense.com",
-      fullName: "shadcn/choosealicense.com",
-      visibility: "private",
-      anyUpdate: true,
-    },
-    {
-      name: "gh-ost",
-      path: "/home/ruru/projects/gh-ost",
-      fullName: "shadcn/gh-ost",
-      visibility: "public",
-      anyUpdate: false,
-    },
-  ],
-  oraczen: [
-    {
-      name: "zendesign",
-      path: "/home/ruru/projects/zendesign",
-      fullName: "oraczen/zendesign",
-      visibility: "private",
-      anyUpdate: true,
-    },
-    {
-      name: "farmerediteast",
-      path: "/home/ruru/projects/farmerediteast",
-      fullName: "oraczen/farmerediteast",
-      visibility: "public",
-      anyUpdate: false,
-    },
-  ],
-  "ruru-m07": [
-    {
-      name: "noutify",
-      path: "/home/ruru/projects/noutify",
-      fullName: "ruru-m07/noutify",
-      visibility: "private",
-      anyUpdate: true,
-    },
-    {
-      name: "ruru-ui",
-      path: "/home/ruru/projects/ruru-ui",
-      fullName: "ruru-m07/ruru-ui",
-      visibility: "public",
-      anyUpdate: true,
-    },
-    {
-      name: "commitly",
-      path: "/home/ruru/projects/commitly",
-      fullName: "ruru-m07/commitly",
-      visibility: "private",
-      anyUpdate: false,
-    },
-  ],
-  other: [
-    {
-      name: "other-repo",
-      path: "/home/ruru/projects/other-repo",
-      fullName: "other/other-repo",
-      visibility: "public",
-      anyUpdate: false,
-    },
-  ],
-};
+import { getUserRepos, saveUserRepoPath } from "@/actions/electrone";
+import { toast } from "sonner";
+import { useGit } from "@/context/git";
 
 const GitPageLayout = ({ children }: { children: React.ReactNode }) => {
   const [repoSelectIsOpen, setRepoSelectIsOpen] = useState(false);
+
+  const {
+    allLocalRepos,
+    updateRepoList,
+    updateSelectRepo,
+    selectedRepo,
+    status,
+  } = useGit();
+
+  const formattedRepos = allLocalRepos.reduce(
+    (acc, repo) => {
+      const key = repo.repoUsername || "other";
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push({
+        id: repo.id,
+        name: repo.name,
+        path: repo.path,
+        fullName: (repo.repoUsername as string) + "/" + repo.repoName,
+        visibility: repo.isPrivate ? "private" : "public",
+        isSelected: selectedRepo?.id === repo.id,
+      });
+      return acc;
+    },
+    {} as Record<
+      string,
+      Array<{
+        id: string;
+        name: string;
+        path: string;
+        fullName: string;
+        visibility: string;
+        isSelected: boolean;
+      }>
+    >
+  );
 
   return (
     <>
@@ -158,7 +94,9 @@ const GitPageLayout = ({ children }: { children: React.ReactNode }) => {
             <div className="flex items-center gap-2">
               <BookDashed />
               <div className="flex items-center gap-1">
-                <H4>noutify</H4>
+                <H4 className="w-[var(--inbox-width)-200px] truncate">
+                  {selectedRepo?.repoName}
+                </H4>
                 <span className="mx-2 text-lg">{" • "}</span>
                 <Badge variant="outline" className="gap-1 py-1 pr-3">
                   <ArrowUp
@@ -208,12 +146,44 @@ const GitPageLayout = ({ children }: { children: React.ReactNode }) => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="min-w-(--radix-dropdown-menu-trigger-width)">
                     <DropdownMenuItem>Clone repository...</DropdownMenuItem>
-                    <DropdownMenuItem>Add local repository...</DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        try {
+                          const folderPath =
+                            await window.electron.selectFolder();
+                          if (folderPath) {
+                            const data = await saveUserRepoPath(folderPath);
+
+                            if (data.error) {
+                              console.log(data.error);
+                              toast.error(data.error);
+                            }
+
+                            if (data.success) {
+                              toast.success(
+                                "Local repository added successfully!"
+                              );
+                              updateSelectRepo(data.data?.id as string);
+                            }
+                          } else {
+                            console.log("Folder selection was canceled.");
+                          }
+                        } catch (error) {
+                          console.error("Error selecting folder:", error);
+                          toast.error("Failed to add local repository.");
+                        } finally {
+                          updateRepoList();
+                          setRepoSelectIsOpen(false);
+                        }
+                      }}
+                    >
+                      Add local repository...
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
               <ScrollArea className="flex-grow p-4 bg-primary-foreground/75 z-10">
-                {Object.entries(dummyData2).map(([key, value]) => {
+                {Object.entries(formattedRepos).map(([key, value]) => {
                   return (
                     <div key={key} className="flex flex-col px-2 py-3">
                       <span className="text-muted-foreground mb-2">{key}</span>
@@ -224,7 +194,18 @@ const GitPageLayout = ({ children }: { children: React.ReactNode }) => {
                               <TooltipTrigger asChild>
                                 <Button
                                   variant={"ghost"}
-                                  className="w-full justify-between text-lg"
+                                  className={cn(
+                                    "w-full justify-between text-lg",
+                                    v.isSelected
+                                      ? "bg-accent-foreground/10"
+                                      : ""
+                                  )}
+                                  onClick={async () => {
+                                    if (!v.isSelected) {
+                                      await updateSelectRepo(v.id);
+                                      setRepoSelectIsOpen(false);
+                                    }
+                                  }}
                                 >
                                   <div className="flex items-center gap-2">
                                     {v.name}
@@ -236,8 +217,8 @@ const GitPageLayout = ({ children }: { children: React.ReactNode }) => {
                                       />
                                     )}
                                   </div>
-                                  {v.anyUpdate && (
-                                    <div className="size-2 bg-blue-500 rounded-full"></div>
+                                  {v.isSelected && (
+                                    <div className="size-2 bg-emerald-500 rounded-full"></div>
                                   )}
                                 </Button>
                               </TooltipTrigger>
@@ -267,7 +248,7 @@ const GitPageLayout = ({ children }: { children: React.ReactNode }) => {
                   )}
                 >
                   Changes
-                  <Badge>69</Badge>
+                  <Badge>{status?.files.length}</Badge>
                 </div>
                 <div
                   className={cn(
@@ -300,18 +281,7 @@ const GitPageLayout = ({ children }: { children: React.ReactNode }) => {
               placeholder="Some Description..."
               className="min-h-20"
             />
-            <Button
-              onClick={async () => {
-                const folderPath = await window.electron.selectFolder();
-                if (folderPath) {
-                  console.log("Selected folder:", folderPath);
-                  // Do something with folderPath
-                } else {
-                  console.log("Folder selection was canceled.");
-                }
-              }}
-              className="w-full"
-            >
+            <Button className="w-full">
               commit to <b className="ml-1">main</b>
             </Button>
           </div>

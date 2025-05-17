@@ -9,7 +9,7 @@ import { Button } from "@noutify/ui/components/button";
 import { getUpStreamURL } from "@/actions/getUpStream";
 import { getServerPort } from "@/actions/getServerPort";
 
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { storeTempCode } from "@/actions/storeTempCode";
 import { poolTempUser } from "@/actions/poolTempUser";
 import { createSession } from "@/actions/createSession";
@@ -244,7 +244,6 @@ export default function LoginPage() {
           </Muted>
         </div>
       </div>
-      <Toaster />
     </div>
   );
 }

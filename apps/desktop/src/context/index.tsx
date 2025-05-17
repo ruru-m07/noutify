@@ -6,6 +6,7 @@ import { TooltipProvider } from "@noutify/ui/components/tooltip";
 
 import { ThemeProvider } from "./theme";
 import { SessionProvider } from "next-auth/react";
+import { GitProvider } from "./git";
 
 const ContextProvider = React.forwardRef<
   HTMLDivElement,
@@ -23,7 +24,9 @@ const ContextProvider = React.forwardRef<
         session={session}
       >
         <ThemeProvider>
-          <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
+          <GitProvider>
+            <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
+          </GitProvider>
         </ThemeProvider>
       </SessionProvider>
     </div>

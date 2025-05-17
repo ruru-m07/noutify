@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 import Sidebar from "@/components/customs/sidebar";
 import Home from "@/components/pages/home";
 import { redirect } from "next/navigation";
+import { Toaster } from "sonner";
 
 const defaultMetadata = {
   title: "Noutify",
@@ -44,6 +45,7 @@ export default async function ProtectedLayout({
       <div className="[--margin:0.7rem] [--inbox-width:23rem] [--top-nav-height:3rem] m-[var(--margin)] bg-accent/35 border w-full h-[calc(100vh-var(--margin)*2)] rounded-md overflow-hidden flex">
         {children}
       </div>
+      <Toaster />
     </div>
   );
 }

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Logo from "./logo";
 import { Button, buttonVariants } from "@noutify/ui/components/button";
 import { ArrowRightIcon, Book, Menu, Tag, Telescope, X } from "lucide-react";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import Image from "next/image";
+import { cn } from "@noutify/ui/lib/utils";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,10 +18,16 @@ const Navbar = () => {
   return (
     <div className="w-full px-4 sm:px-6 md:px-12 lg:px-24 xl:px-72">
       <div className="w-full h-full mt-5 flex items-center p-4 justify-between">
-        <div className="flex items-center">
-          <Logo size={40} />
-          <div className="text-xl sm:text-2xl ml-2">Noutify</div>
-        </div>
+        <Link href={"/"} className="flex items-center">
+          <Image
+            src={"/assets/logo_custom.svg"}
+            alt="catra logo dark"
+            width={40}
+            height={40}
+            className="dark:block hidden"
+          />
+          <div className="text-xl sm:text-2xl ">Noutify</div>
+        </Link>
 
         <div className="h-full hidden md:flex items-center">
           <Button className="rounded-xl" variant={"ghost"}>
@@ -61,14 +68,24 @@ const Navbar = () => {
           >
             <GitHubLogoIcon className="opacity-70" aria-hidden="true" />
           </Link>
-          <Button className="rounded-xl hidden sm:flex bg-[#D1CFC0] hover:bg-[#adaca1] text-[#1F1F1F] font-semibold group gap-1">
+          <Link
+            href={"/downloads"}
+            className={cn(
+              buttonVariants({}),
+              "rounded-xl hidden sm:flex bg-[#D1CFC0] hover:bg-[#adaca1] text-[#1F1F1F] font-semibold group gap-1"
+            )}
+            style={{
+              boxShadow:
+                "inset 2px 2px 10px 1px rgba(255, 255, 255, 1), inset -1px -1px 6px 1px rgba(0, 0, 0, 1)",
+            }}
+          >
             Download
             <ArrowRightIcon
               className="-me-1 opacity-70 transition-transform group-hover:translate-x-1"
               size={16}
               aria-hidden="true"
             />
-          </Button>
+          </Link>
 
           <Button
             variant="ghost"

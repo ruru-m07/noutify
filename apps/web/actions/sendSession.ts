@@ -2,7 +2,7 @@
 
 import { auth } from "@/auth";
 
-export async function sendSession({ port }: { port: string }) {
+export async function sendSession() {
   const session = await auth();
 
   const user = {
@@ -20,23 +20,9 @@ export async function sendSession({ port }: { port: string }) {
     },
   };
 
-  const res = await fetch(`http://localhost:${port}/api/auth/create-session`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      user: user,
-    }),
-  });
-
-  console.log({
-    hmmmmmmmmmmmm: "asds",
-    "create-session": res,
-  });
-
   return {
     data: {
+      user: user,
       success: true,
     },
   };

@@ -59,15 +59,11 @@ export async function saveUserRepoPath(repoPath: string) {
 
     const ghClient = await getGithubClient();
 
-    console.log({
-      originUrl,
-    });
+    log.info("GitHub client initialized:", !!ghClient);
 
     const parsedInfo = originUrl ? parseGitHubInfo(originUrl) : null;
 
-    console.log({
-      parsedInfo,
-    });
+    log.info("Parsed GitHub info:", parsedInfo);
 
     if (!parsedInfo?.repoUsername || !parsedInfo?.repoName) {
       log.error("Parsed GitHub info is missing username or repository name.");

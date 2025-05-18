@@ -64,11 +64,6 @@ export function DiffViewer() {
   }, [selectedFile]);
 
   useEffect(() => {
-    console.log({
-      selectedFile,
-      diffText,
-    });
-
     if (diffText) {
       parseDiff(diffText);
     }
@@ -85,10 +80,7 @@ export function DiffViewer() {
     if (!selectedFile?.diff) {
       return;
     }
-    console.log({
-      selectedFile,
-      diffText,
-    });
+
     if (diffText) {
       parseDiff(diffText);
     } else if (selectedFile?.diff) {

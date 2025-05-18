@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import NextTopLoader from "nextjs-toploader";
 
 import { Bricolage_Grotesque } from "next/font/google";
 
@@ -49,20 +47,7 @@ export default async function RootLayout({
         />
         <link rel="manifest" href="/favicon/site.webmanifest" />
       </head>
-      {/* <body className={GeistSans.className}> */}
       <body className={bricolage.className}>
-        <NextTopLoader
-          color="#ffffff"
-          initialPosition={0.08}
-          crawlSpeed={200}
-          height={3}
-          crawl={true}
-          showSpinner={false}
-          easing="ease"
-          speed={200}
-          zIndex={1600}
-          showAtBottom={false}
-        />
         <ContextProvider session={session}>{children}</ContextProvider>
       </body>
     </html>

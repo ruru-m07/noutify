@@ -66,15 +66,14 @@ export const GitProvider: React.FC<GitProviderProps> = ({ children }) => {
   }
 
   const getStatus = async () => {
-    console.log(selectedRepo);
     const gitStatus = await getGitStatus(selectedRepo?.path as string);
     if (gitStatus.success) {
       setStatus(gitStatus.data);
 
-      setSelectedFile({
-        meta: gitStatus.data.files[0],
-        diff: null,
-      });
+      // setSelectedFile({
+      //   meta: gitStatus.data.files[0],
+      //   diff: null,
+      // });
     }
   };
 
@@ -85,10 +84,6 @@ export const GitProvider: React.FC<GitProviderProps> = ({ children }) => {
     }
 
     if (data.success) {
-      console.log({
-        meta: file,
-        diff: data.data,
-      });
       setSelectedFile({
         meta: file,
         diff: data.data,

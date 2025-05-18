@@ -6,10 +6,6 @@ import TokenCard from "./tokenCard";
 export default async function TokenPage() {
   const session = await auth();
 
-  console.log({
-    session,
-  });
-
   if (!session) {
     redirect("/auth/login");
   }

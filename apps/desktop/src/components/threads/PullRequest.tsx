@@ -24,9 +24,6 @@ interface ThreadProps {
   notification: Notification;
 }
 const PullRequestThread = ({ notification }: ThreadProps) => {
-  console.log({
-    notification,
-  });
   return (
     <div className="mt-10">
       <div>

@@ -221,9 +221,6 @@ const InboxLayout = async ({ children }: { children: React.ReactNode }) => {
                           key={i}
                           className="relative rounded-md hover:bg-primary-foreground/75 p-4 flex gap-2 cursor-pointer h-[4.5rem]"
                           onClick={() => {
-                            console.log({
-                              notification,
-                            });
                             setSelectedNotification(notification);
                           }}
                         >

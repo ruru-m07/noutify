@@ -62,7 +62,18 @@ const PageClient = ({
       const data = await res.json();
 
       if (data.success) {
-        const { data } = await sendSession({ port });
+        const { data } = await sendSession();
+
+        await fetch(`http://localhost:${port}/api/auth/create-session`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user: data.user,
+          }),
+        });
+
         if (data.success) {
           setMessage("Device authorized successfully");
           setTimeout(() => {

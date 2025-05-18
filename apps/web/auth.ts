@@ -35,9 +35,6 @@ export const {
     jwt({ token, trigger, session, user, profile }) {
       if (trigger === "update" && session) {
         token.accessToken = session.user.accessToken;
-        console.log({
-          hmm: session.user.accessToken,
-        });
       }
       if (user) {
         token.profile = profile;

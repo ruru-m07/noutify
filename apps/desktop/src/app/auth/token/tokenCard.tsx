@@ -52,10 +52,7 @@ const TokenCard = ({ session }: { session: Session }) => {
           setLoading(true);
           (async () => {
             const result = await setTokenAction({ token });
-            console.log({
-              result,
-            });
-
+            
             if (result?.error) {
               setError(result.error);
             }

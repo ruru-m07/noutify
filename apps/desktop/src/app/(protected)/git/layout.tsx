@@ -155,7 +155,6 @@ const GitPageLayout = ({ children }: { children: React.ReactNode }) => {
                             const data = await saveUserRepoPath(folderPath);
 
                             if (data.error) {
-                              console.log(data.error);
                               toast.error(data.error);
                             }
 

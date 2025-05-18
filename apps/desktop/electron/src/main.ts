@@ -27,7 +27,6 @@ let mainWindow: BrowserWindow | null = null;
 let isQuiting = false;
 
 const userDataPath = app.getPath("userData");
-console.log("user data path: ", userDataPath)
 
 const createWindow = (): BrowserWindow => {
   mainWindow = new BrowserWindow({
@@ -210,7 +209,7 @@ app.whenReady().then(() => {
     else mainWindow?.show();
   });
 
-  const iconPath = join(__dirname, "../public/icons/linux/64x64.png");
+  const iconPath = join(__dirname, "../public/icons/tray/icon.png");
   const trayIcon = nativeImage.createFromPath(iconPath);
   tray = new Tray(trayIcon);
 
